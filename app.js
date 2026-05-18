@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
         bridge: L.layerGroup(),
         attraction: L.layerGroup(),
         dock: L.layerGroup(),
-        parking: L.layerGroup(),
         checkin: L.layerGroup()
     };
 
@@ -269,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
         L.marker(lot.coords, { 
             icon: parkingIcon,
             interactive: false // 完全禁用互動 (不變手形、不可點擊、無懸停反應)
-        }).addTo(mapGroups.parking);
+        }).addTo(map); // 直接加載至主地圖上，始終維持顯示！
     });
 
     // 13. 主要島嶼區範圍高亮 (翠綠綠虛線高亮)
@@ -893,7 +892,6 @@ document.addEventListener("DOMContentLoaded", () => {
         bridge: document.getElementById('layer-bridge'),
         attraction: document.getElementById('layer-attraction'),
         dock: document.getElementById('layer-dock'),
-        parking: document.getElementById('layer-parking'),
         checkin: document.getElementById('layer-checkin')
     };
 
