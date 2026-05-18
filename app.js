@@ -309,6 +309,16 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction).bindTooltip("釣魚平台 (親水休閒垂釣區)", { sticky: true, className: 'custom-tooltip' });
 
+    // 13.95 豐之谷 - 湖畔小憩範圍 (特製薄荷翠綠多邊形，彰顯湖畔林蔭漫步與休憩意境)
+    L.polygon(OSM_BUILDING_LAKESIDE_REST, {
+        color: '#10ac84',       // 翡翠薄荷綠邊框
+        weight: 2,
+        fillColor: '#1dd1a1',   // 亮翠綠填充
+        fillOpacity: 0.15,
+        lineCap: 'round',
+        lineJoin: 'round'
+    }).addTo(mapGroups.attraction).bindTooltip("湖畔小憩 (水岸休閒漫步區)", { sticky: true, className: 'custom-tooltip' });
+
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
         color: '#2980b9',       // 深水藍色
