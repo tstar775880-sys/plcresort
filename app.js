@@ -890,6 +890,16 @@ document.addEventListener("DOMContentLoaded", () => {
         checkin: document.getElementById('layer-checkin')
     };
 
+    const selectAllCheckbox = document.getElementById('layer-select-all');
+
+    // 更新全選狀態輔助函式 (若所有子選項都勾選，則全選主盒自動勾選，否則取消勾選)
+    function updateSelectAllState() {
+        if (selectAllCheckbox) {
+            const allChecked = Object.values(layerCheckboxes).every(cb => cb && cb.checked);
+            selectAllCheckbox.checked = allChecked;
+        }
+    }
+
     Object.keys(layerCheckboxes).forEach(key => {
         const checkbox = layerCheckboxes[key];
         if (checkbox) {
@@ -899,9 +909,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     map.removeLayer(mapGroups[key]);
                 }
+                updateSelectAllState(); // 更新全選狀態
             });
         }
     });
+
+    // 監聽全選主核取盒 (一鍵勾選/取消全圖層)
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            Object.keys(layerCheckboxes).forEach(key => {
+                const checkbox = layerCheckboxes[key];
+                if (checkbox && checkbox.checked !== isChecked) {
+                    checkbox.checked = isChecked;
+                    if (isChecked) {
+                        mapGroups[key].addTo(map);
+                    } else {
+                        map.removeLayer(mapGroups[key]);
+                    }
+                }
+            });
+        });
+    }
 
     // ==================== 7.5 推薦打卡景點任務活動邏輯 ====================
     function initCheckinQuest() {
