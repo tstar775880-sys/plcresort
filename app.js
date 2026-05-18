@@ -277,15 +277,16 @@ document.addEventListener("DOMContentLoaded", () => {
     L.polygon(OSM_AREA_XIAODAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("小島區", { sticky: true, className: 'custom-tooltip' });
     L.polygon(OSM_AREA_DADAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("大島區", { sticky: true, className: 'custom-tooltip' });
 
-    // 13.5 豐之谷 - 孔雀島範圍 (特製翠綠藍多邊形)
-    L.polygon(OSM_BUILDING_PEACOCK_ISLAND, {
-        color: '#10ac84',       // 翡翠綠邊框
-        weight: 2,
-        fillColor: '#1dd1a1',   // 亮翠綠填充
-        fillOpacity: 0.18,
-        lineCap: 'round',
-        lineJoin: 'round'
-    }).addTo(mapGroups.attraction).bindTooltip("孔雀島 (親近可愛孔雀與小山羊)", { sticky: true, className: 'custom-tooltip' });
+    // 13.5 豐之谷 - 孔雀島 (特製翡翠綠色圓點標記)
+    const peacockIslandMarker = L.circleMarker(RESORT_LOCATIONS["孔雀島"], {
+        radius: 7,
+        fillColor: '#10ac84',   // 經典翡翠綠色
+        color: '#ffffff',       // 質感白框
+        weight: 1.8,
+        opacity: 1,
+        fillOpacity: 0.95
+    }).addTo(mapGroups.attraction);
+    peacockIslandMarker.bindTooltip("孔雀島 (親近可愛孔雀與小山羊)", { sticky: true, className: 'custom-tooltip' });
 
     // 13.8 豐之谷 - 水中落羽松 (特製落羽杉深綠圓形標記)
     const cypressMarker = L.circleMarker(RESORT_LOCATIONS["水中落羽松"], {
