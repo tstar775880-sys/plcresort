@@ -29,6 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     L.control.layers(baseMaps, null, { position: 'bottomright' }).addTo(map);
 
+    // 2.5 初始化地圖圖層分類群組 (LayerGroup)
+    const mapGroups = {
+        accommodation: L.layerGroup().addTo(map),
+        restaurant: L.layerGroup().addTo(map),
+        toilet: L.layerGroup().addTo(map),
+        bridge: L.layerGroup().addTo(map),
+        attraction: L.layerGroup().addTo(map),
+        dock: L.layerGroup().addTo(map)
+    };
+
     // --- 繪製權威開放街圖 (OSM) 範圍多邊形 (新增功能) ---
     
     // 1. 理想大地主島區 (金邊 + 綠底)
@@ -75,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.2,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(map);
+    }).addTo(mapGroups.restaurant);
     buildingFengweiPoly.bindTooltip("風味餐廳 (建築主體)", { sticky: true, className: 'custom-tooltip' });
 
     // 5. 豪雍精品 建築範圍 (桃紫色 + 填充)
@@ -86,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.2,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(map);
+    }).addTo(mapGroups.attraction);
     buildingHaoyongPoly.bindTooltip("豪雍精品 (建築主體)", { sticky: true, className: 'custom-tooltip' });
 
     // 6. 接待大廳 (Lobby) 建築範圍 (高貴褐金 + 填充)
@@ -97,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.2,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(map);
+    }).addTo(mapGroups.accommodation);
     buildingLobbyPoly.bindTooltip("接待大廳 (Lobby 建築主體)", { sticky: true, className: 'custom-tooltip' });
 
     // 7. 星空電影 建築範圍 (亮紫色 + 填充，營造璀璨星空色彩)
@@ -108,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.15,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(map);
+    }).addTo(mapGroups.attraction);
     starryMoviePoly.bindTooltip("星空電影", { sticky: true, className: 'custom-tooltip' });
 
     // 8. 射箭場 範圍 (亮黃金橘 + 虛線填充)
@@ -120,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.25,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(map);
+    }).addTo(mapGroups.attraction);
     areaArcheryPoly.bindTooltip("射箭場", { sticky: true, className: 'custom-tooltip' });
 
     // 9. 塞維亞草原 (精準點位 - 特製綠色圓點)
@@ -131,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weight: 2.5,
         opacity: 1,
         fillOpacity: 0.9
-    }).addTo(map);
+    }).addTo(mapGroups.attraction);
     sevilleGrasslandMarker.bindTooltip("塞維亞草原 (Google Map 抓取點位)", { sticky: true, className: 'custom-tooltip' });
 
     // 10. 瑜珈平台 (精準點位 - 特製圓形標記)
@@ -142,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weight: 2,
         opacity: 1,
         fillOpacity: 0.85
-    }).addTo(map);
+    }).addTo(mapGroups.attraction);
     yogaPlatformMarker.bindTooltip("瑜珈平台 (戶外露台點位)", { sticky: true, className: 'custom-tooltip' });
 
     // 10.5 運河橋樑精準點位標記 (西班牙古典赤磚紅圓點，展現西班牙古風運河水鄉之美)
@@ -167,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
             weight: 1.8,
             opacity: 1,
             fillOpacity: 0.95
-        }).addTo(map);
+        }).addTo(mapGroups.bridge);
         marker.bindTooltip(bridge.label, { sticky: true, className: 'custom-tooltip' });
     });
 
@@ -189,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
             weight: 1.8,
             opacity: 1,
             fillOpacity: 0.95
-        }).addTo(map);
+        }).addTo(mapGroups.dock);
         marker.bindTooltip(dock.label, { sticky: true, className: 'custom-tooltip' });
     });
 
@@ -224,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
             fillOpacity: 0.22,
             lineCap: 'round',
             lineJoin: 'round'
-        }).addTo(map)
+        }).addTo(mapGroups.accommodation)
           .bindTooltip(building.name, { sticky: true, className: 'custom-tooltip' });
     });
 
@@ -238,9 +248,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     };
 
-    L.polygon(OSM_PARKING_LARGE, parkingStyle).addTo(map).bindTooltip("大型停車場", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_PARKING_1, parkingStyle).addTo(map).bindTooltip("第一停車場", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_PARKING_2, parkingStyle).addTo(map).bindTooltip("第二停車場 (生態公園)", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_LARGE, parkingStyle).addTo(mapGroups.attraction).bindTooltip("大型停車場", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_1, parkingStyle).addTo(mapGroups.attraction).bindTooltip("第一停車場", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_2, parkingStyle).addTo(mapGroups.attraction).bindTooltip("第二停車場 (生態公園)", { sticky: true, className: 'custom-tooltip' });
 
     // 13. 主要島嶼區範圍高亮 (翠綠綠虛線高亮)
     const islandStyle = {
@@ -252,9 +262,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lineCap: 'round',
         lineJoin: 'round'
     };
-    L.polygon(OSM_AREA_ZHONGDAO, islandStyle).addTo(map).bindTooltip("中島區", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_AREA_XIAODAO, islandStyle).addTo(map).bindTooltip("小島區", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_AREA_DADAO, islandStyle).addTo(map).bindTooltip("大島區", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_AREA_ZHONGDAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("中島區", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_AREA_XIAODAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("小島區", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_AREA_DADAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("大島區", { sticky: true, className: 'custom-tooltip' });
 
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
@@ -265,9 +275,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lineCap: 'round',
         lineJoin: 'round'
     };
-    L.polygon(OSM_TOILET_ZHONGDAO, toiletStyle).addTo(map).bindTooltip("中島區公共廁所", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_TOILET_XIAODAO, toiletStyle).addTo(map).bindTooltip("小島區公共廁所", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_TOILET_DADAO, toiletStyle).addTo(map).bindTooltip("大島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_ZHONGDAO, toiletStyle).addTo(mapGroups.toilet).bindTooltip("中島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_XIAODAO, toiletStyle).addTo(mapGroups.toilet).bindTooltip("小島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_DADAO, toiletStyle).addTo(mapGroups.toilet).bindTooltip("大島區公共廁所", { sticky: true, className: 'custom-tooltip' });
 
     // 15. 里拉餐廳主體 (精緻磚橘色)
     L.polygon(OSM_BUILDING_LIRA_RESTAURANT, {
@@ -277,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.25,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(map).bindTooltip("里拉餐廳", { sticky: true, className: 'custom-tooltip' });
+    }).addTo(mapGroups.restaurant).bindTooltip("里拉餐廳", { sticky: true, className: 'custom-tooltip' });
 
     // 自動自適應縮放地圖以完美容納這三個主要園區範圍
     const groupBounds = L.featureGroup([promiseLandPoly, fengzhiguPoly, a2WaterfrontPoly]).getBounds();
@@ -779,6 +789,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+
+    // 地圖圖層分類篩選監聽器 (即時開關 LayerGroup)
+    const layerCheckboxes = {
+        accommodation: document.getElementById('layer-accommodation'),
+        restaurant: document.getElementById('layer-restaurant'),
+        toilet: document.getElementById('layer-toilet'),
+        bridge: document.getElementById('layer-bridge'),
+        attraction: document.getElementById('layer-attraction'),
+        dock: document.getElementById('layer-dock')
+    };
+
+    Object.keys(layerCheckboxes).forEach(key => {
+        const checkbox = layerCheckboxes[key];
+        if (checkbox) {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    mapGroups[key].addTo(map);
+                } else {
+                    map.removeLayer(mapGroups[key]);
+                }
+            });
+        }
+    });
 
     // ==================== 8. 初始化執行觸發 ====================
     

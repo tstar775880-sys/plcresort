@@ -956,3 +956,83 @@ body, html {
     background: var(--accent-gold);
     color: var(--primary-dark);
 }
+
+/* ==================== 地圖圖層分類篩選面板樣式 ==================== */
+#map-layer-control {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    z-index: 999;
+    padding: 16px 20px;
+    border-radius: 6px;
+    width: 160px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.layer-control-title {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 6px;
+}
+
+.layer-control-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.layer-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #ffffff;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.layer-option:hover {
+    color: var(--accent-gold);
+}
+
+.layer-option input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.layer-option input[type="checkbox"]:checked {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+}
+
+.layer-option input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 7px;
+    border: solid var(--primary-dark);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
