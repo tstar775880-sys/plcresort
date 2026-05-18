@@ -147,16 +147,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 10.5 運河橋樑精準點位標記 (西班牙古典赤磚紅圓點，展現西班牙古風運河水鄉之美)
     const bridges = [
-        { name: "神話橋", label: "🌉 神話橋" },
-        { name: "習閒橋", label: "🌉 習閒橋" },
-        { name: "山海橋", label: "🌉 山海橋" },
-        { name: "麥迪遜橋", label: "🌉 麥迪遜橋" },
-        { name: "日不落橋", label: "🌉 日不落橋" },
-        { name: "太極橋", label: "🌉 太極橋 (官方圖標示，OSM 未顯)" },
-        { name: "彩虹橋", label: "🌉 彩虹橋" },
-        { name: "應許橋", label: "🌉 應許橋" },
-        { name: "友誼橋", label: "🌉 友誼橋" },
-        { name: "牽手橋", label: "🌉 牽手橋" }
+        { name: "神話橋", label: "神話橋" },
+        { name: "習閒橋", label: "習閒橋" },
+        { name: "山海橋", label: "山海橋" },
+        { name: "麥迪遜橋", label: "麥迪遜橋" },
+        { name: "日不落橋", label: "日不落橋" },
+        { name: "太極橋", label: "太極橋 (官方圖標示，OSM 未顯)" },
+        { name: "彩虹橋", label: "彩虹橋" },
+        { name: "應許橋", label: "應許橋" },
+        { name: "友誼橋", label: "友誼橋" },
+        { name: "牽手橋", label: "牽手橋" }
     ];
 
     bridges.forEach(bridge => {
@@ -243,9 +243,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lineCap: 'round',
         lineJoin: 'round'
     };
-    L.polygon(OSM_TOILET_ZHONGDAO, toiletStyle).addTo(map).bindTooltip("🚻 中島區公共廁所", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_TOILET_XIAODAO, toiletStyle).addTo(map).bindTooltip("🚻 小島區公共廁所", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_TOILET_DADAO, toiletStyle).addTo(map).bindTooltip("🚻 大島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_ZHONGDAO, toiletStyle).addTo(map).bindTooltip("中島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_XIAODAO, toiletStyle).addTo(map).bindTooltip("小島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_DADAO, toiletStyle).addTo(map).bindTooltip("大島區公共廁所", { sticky: true, className: 'custom-tooltip' });
 
     // 15. 里拉餐廳主體 (精緻磚橘色)
     L.polygon(OSM_BUILDING_LIRA_RESTAURANT, {
