@@ -100,8 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }).addTo(map);
     buildingLobbyPoly.bindTooltip("接待大廳 (Lobby 建築主體)", { sticky: true, className: 'custom-tooltip' });
 
-    // 7. 休閒區 建築範圍 (亮紫色 + 填充)
-    const areaLeisurePoly = L.polygon(OSM_AREA_LEISURE, {
+    // 7. 星空電影 建築範圍 (亮紫色 + 填充，營造璀璨星空色彩)
+    const starryMoviePoly = L.polygon(OSM_AREA_STARRY_MOVIE, {
         color: '#6c5ce7',       // 深紫藍色
         weight: 2,
         fillColor: '#6c5ce7',
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineCap: 'round',
         lineJoin: 'round'
     }).addTo(map);
-    areaLeisurePoly.bindTooltip("休閒區 (建築群體)", { sticky: true, className: 'custom-tooltip' });
+    starryMoviePoly.bindTooltip("星空電影", { sticky: true, className: 'custom-tooltip' });
 
     // 8. 射箭場 範圍 (亮黃金橘 + 虛線填充)
     const areaArcheryPoly = L.polygon(OSM_AREA_ARCHERY, {
@@ -179,6 +179,57 @@ document.addEventListener("DOMContentLoaded", () => {
         }).addTo(map)
           .bindTooltip(building.name, { sticky: true, className: 'custom-tooltip' });
     });
+
+    // 12. 理想大地停車場區 (優雅灰色，批次繪製維持視覺一致性)
+    const parkingStyle = {
+        color: '#7f8c8d',       // 質感灰色邊框
+        weight: 1.5,
+        fillColor: '#95a5a6',   // 淺灰填充
+        fillOpacity: 0.15,
+        lineCap: 'round',
+        lineJoin: 'round'
+    };
+
+    L.polygon(OSM_PARKING_LARGE, parkingStyle).addTo(map).bindTooltip("大型停車場", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_1, parkingStyle).addTo(map).bindTooltip("第一停車場", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_2, parkingStyle).addTo(map).bindTooltip("第二停車場 (生態公園)", { sticky: true, className: 'custom-tooltip' });
+
+    // 13. 主要島嶼區範圍高亮 (翠綠綠虛線高亮)
+    const islandStyle = {
+        color: '#16a085',       // 翠綠綠色
+        weight: 2,
+        dashArray: '5, 5',
+        fillColor: '#1abc9c',   // 亮綠填充
+        fillOpacity: 0.05,
+        lineCap: 'round',
+        lineJoin: 'round'
+    };
+    L.polygon(OSM_AREA_ZHONGDAO, islandStyle).addTo(map).bindTooltip("中島區", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_AREA_XIAODAO, islandStyle).addTo(map).bindTooltip("小島區", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_AREA_DADAO, islandStyle).addTo(map).bindTooltip("大島區", { sticky: true, className: 'custom-tooltip' });
+
+    // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
+    const toiletStyle = {
+        color: '#2980b9',       // 深水藍色
+        weight: 1.5,
+        fillColor: '#3498db',   // 淺水藍色
+        fillOpacity: 0.25,
+        lineCap: 'round',
+        lineJoin: 'round'
+    };
+    L.polygon(OSM_TOILET_ZHONGDAO, toiletStyle).addTo(map).bindTooltip("🚻 中島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_XIAODAO, toiletStyle).addTo(map).bindTooltip("🚻 小島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_TOILET_DADAO, toiletStyle).addTo(map).bindTooltip("🚻 大島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+
+    // 15. 里拉餐廳主體 (精緻磚橘色)
+    L.polygon(OSM_BUILDING_LIRA_RESTAURANT, {
+        color: '#d35400',       // 磚橘色
+        weight: 2,
+        fillColor: '#e67e22',   // 柔橘色
+        fillOpacity: 0.25,
+        lineCap: 'round',
+        lineJoin: 'round'
+    }).addTo(map).bindTooltip("里拉餐廳", { sticky: true, className: 'custom-tooltip' });
 
     // 自動自適應縮放地圖以完美容納這三個主要園區範圍
     const groupBounds = L.featureGroup([promiseLandPoly, fengzhiguPoly, a2WaterfrontPoly]).getBounds();
