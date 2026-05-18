@@ -36,7 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
         toilet: L.layerGroup().addTo(map),
         bridge: L.layerGroup().addTo(map),
         attraction: L.layerGroup().addTo(map),
-        dock: L.layerGroup().addTo(map)
+        dock: L.layerGroup().addTo(map),
+        parking: L.layerGroup().addTo(map),
+        checkin: L.layerGroup().addTo(map)
     };
 
     // --- 繪製權威開放街圖 (OSM) 範圍多邊形 (新增功能) ---
@@ -259,9 +261,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     };
 
-    L.polygon(OSM_PARKING_LARGE, parkingStyle).addTo(mapGroups.attraction).bindTooltip("大型停車場", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_PARKING_1, parkingStyle).addTo(mapGroups.attraction).bindTooltip("第一停車場", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_PARKING_2, parkingStyle).addTo(mapGroups.attraction).bindTooltip("第二停車場 (生態公園)", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_LARGE, parkingStyle).addTo(mapGroups.parking).bindTooltip("大型停車場", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_1, parkingStyle).addTo(mapGroups.parking).bindTooltip("第一停車場", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_PARKING_2, parkingStyle).addTo(mapGroups.parking).bindTooltip("第二停車場 (生態公園)", { sticky: true, className: 'custom-tooltip' });
 
     // 13. 主要島嶼區範圍高亮 (翠綠綠虛線高亮)
     const islandStyle = {
@@ -362,6 +364,18 @@ document.addEventListener("DOMContentLoaded", () => {
         lineCap: 'round',
         lineJoin: 'round'
     }).addTo(mapGroups.restaurant).bindTooltip("里拉餐廳", { sticky: true, className: 'custom-tooltip' });
+    // 16. 理想大地推薦打卡景點 (精緻落落大方圓形標記，專屬 Sunset Rose 奢華調)
+    RECOMMENDED_CHECKPOINTS.forEach(checkpoint => {
+        const checkinMarker = L.circleMarker(checkpoint.coords, {
+            radius: 8,
+            fillColor: '#fd79a8',   // 奢華玫瑰粉
+            color: '#fdcb6e',       // 典雅金邊線
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.95
+        }).addTo(mapGroups.checkin);
+        checkinMarker.bindTooltip("推薦打卡 - " + checkpoint.name + " (" + checkpoint.desc + ")", { sticky: true, className: 'custom-tooltip' });
+    });
 
     // 自動自適應縮放地圖以完美容納這三個主要園區範圍
     const groupBounds = L.featureGroup([promiseLandPoly, fengzhiguPoly, a2WaterfrontPoly]).getBounds();
@@ -871,7 +885,9 @@ document.addEventListener("DOMContentLoaded", () => {
         toilet: document.getElementById('layer-toilet'),
         bridge: document.getElementById('layer-bridge'),
         attraction: document.getElementById('layer-attraction'),
-        dock: document.getElementById('layer-dock')
+        dock: document.getElementById('layer-dock'),
+        parking: document.getElementById('layer-parking'),
+        checkin: document.getElementById('layer-checkin')
     };
 
     Object.keys(layerCheckboxes).forEach(key => {
