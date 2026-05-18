@@ -329,6 +329,16 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction).bindTooltip("親子餵魚區 (生態親水平台)", { sticky: true, className: 'custom-tooltip' });
 
+    // 13.99 豐之谷 - 服務中心與單車租借站 (特製質感紅磚色多邊形，彰顯核心服務地標)
+    L.polygon(OSM_BUILDING_FENGZHIGU_SERVICE_CENTER, {
+        color: '#d35400',       // 質感古銅磚紅
+        weight: 2,
+        fillColor: '#e67e22',   // 溫潤橘紅填充
+        fillOpacity: 0.26,
+        lineCap: 'round',
+        lineJoin: 'round'
+    }).addTo(mapGroups.attraction).bindTooltip("豐之谷服務中心 / 單車租借站 (生態體驗與活動報名處)", { sticky: true, className: 'custom-tooltip' });
+
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
         color: '#2980b9',       // 深水藍色
