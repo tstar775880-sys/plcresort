@@ -50,6 +50,27 @@
                 <div class="search-wrapper">
                     <input type="text" id="activity-search" placeholder="搜尋活動名稱、地點..." />
                 </div>
+
+                <!-- 理想大地推薦打卡任務活動卡片 -->
+                <div class="checkin-quest-card">
+                    <div class="quest-title">理想推薦打卡任務</div>
+                    <div class="quest-desc">於指定打卡點拍照上傳官方 FB，超過 6 則即可至大廳櫃檯兌換精美小禮物！</div>
+                    
+                    <div class="quest-progress-row">
+                        <span class="quest-progress-text" id="quest-progress-label">已打卡: 0 / 6 則 (還差 6 則)</span>
+                        <a href="https://www.facebook.com/plcresorttw" target="_blank" class="fb-link-btn">前往官方FB</a>
+                    </div>
+                    <div class="quest-progress-bar-bg">
+                        <div class="quest-progress-bar-fill" id="quest-progress-fill" style="width: 0%"></div>
+                    </div>
+                    
+                    <details class="quest-details">
+                        <summary class="quest-summary">展開打卡景點清單</summary>
+                        <div class="quest-checklist styled-scroll" id="quest-checklist">
+                            <!-- JS 動態生成打卡景點勾選核取盒 -->
+                        </div>
+                    </details>
+                </div>
             </section>
 
             <!-- 活動列表滾動區 -->
