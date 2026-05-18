@@ -319,6 +319,16 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction).bindTooltip("湖畔小憩 (水岸休閒漫步區)", { sticky: true, className: 'custom-tooltip' });
 
+    // 13.98 豐之谷 - 親子餵魚區範圍 (特製珊瑚粉橘多邊形，散發活潑歡樂親子互動氛圍)
+    L.polygon(OSM_BUILDING_FISH_FEEDING_AREA, {
+        color: '#ff7675',       // 珊瑚粉橘邊框
+        weight: 2,
+        fillColor: '#ff7675',   // 珊瑚粉填充
+        fillOpacity: 0.22,
+        lineCap: 'round',
+        lineJoin: 'round'
+    }).addTo(mapGroups.attraction).bindTooltip("親子餵魚區 (生態親水平台)", { sticky: true, className: 'custom-tooltip' });
+
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
         color: '#2980b9',       // 深水藍色
