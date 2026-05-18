@@ -155,6 +155,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }).addTo(mapGroups.attraction);
     yogaPlatformMarker.bindTooltip("瑜珈平台 (戶外露台點位)", { sticky: true, className: 'custom-tooltip' });
 
+    // 10.2 星巴克花蓮理想門市 (特製星巴克綠色圓點標記，置於 A2 水岸區)
+    const starbucksMarker = L.circleMarker(RESORT_LOCATIONS["星巴克花蓮理想門市"], {
+        radius: 8,
+        fillColor: '#00704a',   // 經典星巴克綠色
+        color: '#ffffff',       // 高雅白邊
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.95
+    }).addTo(mapGroups.restaurant);
+    starbucksMarker.bindTooltip("星巴克花蓮理想門市 (全台最美童話屋星巴克)", { sticky: true, className: 'custom-tooltip' });
+
     // 10.5 運河橋樑精準點位標記 (西班牙古典赤磚紅圓點，展現西班牙古風運河水鄉之美)
     const bridges = [
         { name: "神話橋", label: "神話橋" },
