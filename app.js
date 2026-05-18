@@ -29,16 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     L.control.layers(baseMaps, null, { position: 'bottomright' }).addTo(map);
 
-    // 2.5 初始化地圖圖層分類群組 (LayerGroup)
+    // 2.5 初始化地圖圖層分類群組 (LayerGroup，預設全部不加入地圖以保持清爽)
     const mapGroups = {
-        accommodation: L.layerGroup().addTo(map),
-        restaurant: L.layerGroup().addTo(map),
-        toilet: L.layerGroup().addTo(map),
-        bridge: L.layerGroup().addTo(map),
-        attraction: L.layerGroup().addTo(map),
-        dock: L.layerGroup().addTo(map),
-        parking: L.layerGroup().addTo(map),
-        checkin: L.layerGroup().addTo(map)
+        accommodation: L.layerGroup(),
+        restaurant: L.layerGroup(),
+        toilet: L.layerGroup(),
+        bridge: L.layerGroup(),
+        attraction: L.layerGroup(),
+        dock: L.layerGroup(),
+        parking: L.layerGroup(),
+        checkin: L.layerGroup()
     };
 
     // --- 繪製權威開放街圖 (OSM) 範圍多邊形 (新增功能) ---
@@ -251,19 +251,25 @@ document.addEventListener("DOMContentLoaded", () => {
           .bindTooltip(building.name, { sticky: true, className: 'custom-tooltip' });
     });
 
-    // 12. 理想大地停車場區 (優雅灰色，批次繪製維持視覺一致性)
-    const parkingStyle = {
-        color: '#7f8c8d',       // 質感灰色邊框
-        weight: 1.5,
-        fillColor: '#95a5a6',   // 淺灰填充
-        fillOpacity: 0.15,
-        lineCap: 'round',
-        lineJoin: 'round'
-    };
+    // 12. 理想大地停車場區 (高質感簡潔 P 字圓形標記，降低地圖視覺干擾)
+    const parkingIcon = L.divIcon({
+        className: 'parking-map-icon',
+        html: 'P',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
 
-    L.polygon(OSM_PARKING_LARGE, parkingStyle).addTo(mapGroups.parking).bindTooltip("大型停車場", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_PARKING_1, parkingStyle).addTo(mapGroups.parking).bindTooltip("第一停車場", { sticky: true, className: 'custom-tooltip' });
-    L.polygon(OSM_PARKING_2, parkingStyle).addTo(mapGroups.parking).bindTooltip("第二停車場 (生態公園)", { sticky: true, className: 'custom-tooltip' });
+    const parkingLots = [
+        { name: "大型停車場", coords: [23.8654329, 121.5286354] },
+        { name: "第一停車場", coords: [23.8649423, 121.5281442] },
+        { name: "第二停車場 (生態公園)", coords: [23.8647312, 121.5265898] }
+    ];
+
+    parkingLots.forEach(lot => {
+        L.marker(lot.coords, { icon: parkingIcon })
+         .addTo(mapGroups.parking)
+         .bindTooltip(lot.name, { sticky: true, className: 'custom-tooltip' });
+    });
 
     // 13. 主要島嶼區範圍高亮 (翠綠綠虛線高亮)
     const islandStyle = {
