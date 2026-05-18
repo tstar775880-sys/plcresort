@@ -277,6 +277,27 @@ document.addEventListener("DOMContentLoaded", () => {
     L.polygon(OSM_AREA_XIAODAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("小島區", { sticky: true, className: 'custom-tooltip' });
     L.polygon(OSM_AREA_DADAO, islandStyle).addTo(mapGroups.attraction).bindTooltip("大島區", { sticky: true, className: 'custom-tooltip' });
 
+    // 13.5 豐之谷 - 孔雀島範圍 (特製翠綠藍多邊形)
+    L.polygon(OSM_BUILDING_PEACOCK_ISLAND, {
+        color: '#10ac84',       // 翡翠綠邊框
+        weight: 2,
+        fillColor: '#1dd1a1',   // 亮翠綠填充
+        fillOpacity: 0.18,
+        lineCap: 'round',
+        lineJoin: 'round'
+    }).addTo(mapGroups.attraction).bindTooltip("孔雀島 (親近可愛孔雀與小山羊)", { sticky: true, className: 'custom-tooltip' });
+
+    // 13.8 豐之谷 - 水中落羽松 (特製落羽杉深綠圓形標記)
+    const cypressMarker = L.circleMarker(RESORT_LOCATIONS["水中落羽松"], {
+        radius: 7,
+        fillColor: '#27ae60',   // 森林深綠色
+        color: '#ffffff',       // 高雅白邊
+        weight: 1.8,
+        opacity: 1,
+        fillOpacity: 0.9
+    }).addTo(mapGroups.attraction);
+    cypressMarker.bindTooltip("水中落羽松 (豐之谷水岸絕美秘境)", { sticky: true, className: 'custom-tooltip' });
+
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
         color: '#2980b9',       // 深水藍色
@@ -289,6 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
     L.polygon(OSM_TOILET_ZHONGDAO, toiletStyle).addTo(mapGroups.toilet).bindTooltip("中島區公共廁所", { sticky: true, className: 'custom-tooltip' });
     L.polygon(OSM_TOILET_XIAODAO, toiletStyle).addTo(mapGroups.toilet).bindTooltip("小島區公共廁所", { sticky: true, className: 'custom-tooltip' });
     L.polygon(OSM_TOILET_DADAO, toiletStyle).addTo(mapGroups.toilet).bindTooltip("大島區公共廁所", { sticky: true, className: 'custom-tooltip' });
+    L.polygon(OSM_BUILDING_FENGZHIGU_TOILET, toiletStyle).addTo(mapGroups.toilet).bindTooltip("豐之谷生態公園公共廁所", { sticky: true, className: 'custom-tooltip' });
 
     // 15. 里拉餐廳主體 (精緻磚橘色)
     L.polygon(OSM_BUILDING_LIRA_RESTAURANT, {
