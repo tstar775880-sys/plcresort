@@ -551,7 +551,7 @@ body, html {
 
 .axis-header-corner {
     height: 70px; /* 與活動列標頭同高 */
-    background: rgba(19, 64, 54, 0.8);
+    background: var(--primary-medium); /* 使用與頂部標頭一致的實體固體背景，防透光 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -631,10 +631,10 @@ body, html {
 
 /* --- 右側：內容滑動矩陣 --- */
 .scheduler-content-area {
-    flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
+    width: max-content; /* 確保內容區寬度剛好容納所有活動欄位，避免與左側時間軸重疊 */
 }
 
 /* Sticky 頂部活動標題列 */
