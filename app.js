@@ -145,6 +145,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }).addTo(map);
     yogaPlatformMarker.bindTooltip("瑜珈平台 (戶外露台點位)", { sticky: true, className: 'custom-tooltip' });
 
+    // 10.5 運河橋樑精準點位標記 (西班牙古典赤磚紅圓點，展現西班牙古風運河水鄉之美)
+    const bridges = [
+        { name: "神話橋", label: "🌉 神話橋" },
+        { name: "習閒橋", label: "🌉 習閒橋" },
+        { name: "山海橋", label: "🌉 山海橋" },
+        { name: "麥迪遜橋", label: "🌉 麥迪遜橋" },
+        { name: "日不落橋", label: "🌉 日不落橋" },
+        { name: "太極橋", label: "🌉 太極橋 (官方圖標示，OSM 未顯)" },
+        { name: "彩虹橋", label: "🌉 彩虹橋" },
+        { name: "應許橋", label: "🌉 應許橋" },
+        { name: "友誼橋", label: "🌉 友誼橋" },
+        { name: "牽手橋", label: "🌉 牽手橋" }
+    ];
+
+    bridges.forEach(bridge => {
+        const marker = L.circleMarker(RESORT_LOCATIONS[bridge.name], {
+            radius: 5.5,
+            fillColor: '#d35400',   // 古典赤磚紅/夕陽橘紅
+            color: '#ffffff',       // 精緻白框
+            weight: 1.8,
+            opacity: 1,
+            fillOpacity: 0.95
+        }).addTo(map);
+        marker.bindTooltip(bridge.label, { sticky: true, className: 'custom-tooltip' });
+    });
+
     // 11. 客房棟建築群 (採用批次優雅渲染，維持地圖整潔度與一致性美學)
     const accommodationBuildings = [
         { coords: OSM_BUILDING_1_GAILUN, name: "1棟 (蓋倫會議室/客房)" },
