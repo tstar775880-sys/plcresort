@@ -171,6 +171,28 @@ document.addEventListener("DOMContentLoaded", () => {
         marker.bindTooltip(bridge.label, { sticky: true, className: 'custom-tooltip' });
     });
 
+    // 10.8 運河碼頭精準點位標記 (水天藍色圓點，展現親水碼頭機能)
+    const docks = [
+        { name: "一號碼頭", label: "一號碼頭" },
+        { name: "三號碼頭", label: "三號碼頭" },
+        { name: "五號碼頭", label: "五號碼頭" },
+        { name: "六號碼頭", label: "六號碼頭" },
+        { name: "七號碼頭", label: "七號碼頭" },
+        { name: "八號碼頭", label: "八號碼頭" }
+    ];
+
+    docks.forEach(dock => {
+        const marker = L.circleMarker(RESORT_LOCATIONS[dock.name], {
+            radius: 5.5,
+            fillColor: '#0984e3',   // 水天藍色/清爽湛藍
+            color: '#ffffff',       // 精緻白框
+            weight: 1.8,
+            opacity: 1,
+            fillOpacity: 0.95
+        }).addTo(map);
+        marker.bindTooltip(dock.label, { sticky: true, className: 'custom-tooltip' });
+    });
+
     // 11. 客房棟建築群 (採用批次優雅渲染，維持地圖整潔度與一致性美學)
     const accommodationBuildings = [
         { coords: OSM_BUILDING_1_GAILUN, name: "1棟 (蓋倫會議室/客房)" },
