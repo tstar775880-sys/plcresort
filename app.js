@@ -220,6 +220,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const tableFilterChips = document.querySelectorAll('.table-filter-chip');
     const btnClearThreshold = document.getElementById('btn-clear-threshold');
 
+    // 活動詳情彈出視窗 (Modal) DOM
+    const elModal = document.getElementById('activity-modal');
+    const elModalBody = document.getElementById('modal-body-content');
+    const btnCloseModal = elModal ? elModal.querySelector('.modal-close-btn') : null;
+
 
     // ==================== 4. 時間運算輔助函式 ====================
     // 將 "HH:MM" 格式時間轉換為相對於 08:00 的分鐘數
@@ -382,6 +387,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 選擇特定過濾閾值時間
     function selectTimeThreshold(timeStr) {
+        // 💡 點選已選中的時間時，則切換為取消過濾（顯示全部活動）
+        if (state.timeThreshold === timeStr) {
+            clearTimeThreshold();
+            return;
+        }
+
         state.timeThreshold = timeStr;
         
         // 1. 更新 Y 軸高亮樣式
@@ -432,6 +443,57 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTimetable();
     }
 
+    // ==================== 詳情 Modal 控制邏輯 ====================
+    function showActivityModal(item) {
+        if (!elModal || !elModalBody) return;
+
+        const typeLabel = item.type === 'free' ? '館內免費' : (item.type === 'paid' ? '館內付費' : '館外行程');
+        const badgeClass = item.type === 'free' ? 'badge-free' : (item.type === 'paid' ? 'badge-paid' : 'badge-offsite');
+        
+        elModalBody.innerHTML = `
+            <div class="modal-header">
+                <span class="modal-badge ${badgeClass}">${typeLabel}</span>
+                <h3 class="modal-title">${item.name}</h3>
+            </div>
+            <div class="modal-info-grid">
+                <div class="modal-info-label">📍 地點</div>
+                <div class="modal-info-value">${item.locationName}</div>
+                
+                <div class="modal-info-label">🕒 時間</div>
+                <div class="modal-info-value">${item.time}</div>
+                
+                <div class="modal-info-label">💰 費用</div>
+                <div class="modal-info-value">${item.price}</div>
+            </div>
+            <p class="modal-desc-box">${item.desc}</p>
+        `;
+
+        elModal.classList.remove('view-hidden');
+        setTimeout(() => {
+            elModal.classList.add('active');
+        }, 10);
+    }
+
+    function hideActivityModal() {
+        if (!elModal) return;
+        elModal.classList.remove('active');
+        setTimeout(() => {
+            elModal.classList.add('view-hidden');
+        }, 300);
+    }
+
+    // 註冊 Modal 關閉事件
+    if (btnCloseModal) {
+        btnCloseModal.addEventListener('click', hideActivityModal);
+    }
+    if (elModal) {
+        elModal.addEventListener('click', (e) => {
+            if (e.target === elModal) {
+                hideActivityModal();
+            }
+        });
+    }
+
     // 動態繪製活動軌道與甘特方塊
     function renderTimetable() {
         // 篩選出要呈現的活動資料
@@ -461,13 +523,26 @@ document.addEventListener("DOMContentLoaded", () => {
         existingColumns.forEach(col => elGridBody.removeChild(col));
 
         filteredData.forEach(item => {
-            // 1. 生成頂部固定標題格
+            // 1. 生成頂部固定標題格，並附帶查看資訊按鈕
             const th = document.createElement('div');
             th.className = 'col-header';
             th.innerHTML = `
-                <div class="col-header-title">${item.name}</div>
+                <div class="col-header-title-row">
+                    <div class="col-header-title" title="${item.name}">${item.name}</div>
+                    <button class="info-btn" title="查看活動詳情">i</button>
+                </div>
                 <div class="col-header-subtitle">${item.locationName}</div>
             `;
+            
+            // 點擊 "i" 資訊按鈕跳出 Modal 詳情
+            const btnInfo = th.querySelector('.info-btn');
+            if (btnInfo) {
+                btnInfo.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 阻止氣泡傳播
+                    showActivityModal(item);
+                });
+            }
+
             elHeaders.appendChild(th);
 
             // 2. 生成對應的垂直網格軌道列
