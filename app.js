@@ -266,9 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     parkingLots.forEach(lot => {
-        L.marker(lot.coords, { icon: parkingIcon })
-         .addTo(mapGroups.parking)
-         .bindTooltip(lot.name, { sticky: true, className: 'custom-tooltip' });
+        L.marker(lot.coords, { 
+            icon: parkingIcon,
+            interactive: false // 完全禁用互動 (不變手形、不可點擊、無懸停反應)
+        }).addTo(mapGroups.parking);
     });
 
     // 13. 主要島嶼區範圍高亮 (翠綠綠虛線高亮)

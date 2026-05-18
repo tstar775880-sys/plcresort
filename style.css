@@ -1181,22 +1181,22 @@ body, html {
     transform: rotate(45deg);
 }
 
-/* --- 停車場 P 字圓形圖示標記 --- */
+/* --- 停車場 P 字圓形圖示標記 (融入背景，完全無互動，宛如繪製於背景地圖上) --- */
 .parking-map-icon {
-    background: #576574; /* 質感岩灰色 */
-    border: 1.5px solid #ffffff; /* 典雅亮白框 */
-    color: #ffffff; /* 白色 P 字母 */
+    background: rgba(127, 140, 141, 0.65); /* 半透明莫蘭迪灰，極致融入背景 */
+    border: 1px solid rgba(255, 255, 255, 0.45); /* 輕薄半透明白邊框 */
+    color: rgba(255, 255, 255, 0.85); /* 柔和半透明 P 字 */
     border-radius: 50%; /* 完美圓形 */
-    font-size: 11px;
-    font-weight: 800;
+    font-size: 10px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); /* 柔和扁平陰影，契合手繪地圖質感 */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1;
     text-align: center;
     user-select: none;
-    pointer-events: auto;
+    pointer-events: none; /* 完全穿透鼠標事件 */
 }
 
