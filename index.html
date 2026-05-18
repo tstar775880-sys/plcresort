@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花蓮理想大地渡假飯店 - 互動導覽地圖</title>
+    <meta name="description" content="專為理想大地旅遊規劃的互動式活動地圖導覽系統。">
+    
+    <!-- 引入高級字型 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
+    <!-- 自訂樣式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 頂部視圖切換按鈕 -->
+    <div id="view-switcher" class="view-toggle-container glass-panel-light">
+        <button class="toggle-btn active" data-view="map">地圖導覽</button>
+        <button class="toggle-btn" data-view="table">時間總表</button>
+    </div>
+
+    <div id="app-container">
+        <!-- ==================== 視圖一：地圖介面 ==================== -->
+        <!-- 側邊控制面板 -->
+        <aside id="sidebar" class="glass-panel">
+            <header class="sidebar-header">
+                <div class="resort-prefix">PROMISELAND RESORT</div>
+                <h1 class="resort-title">理想大地互動導覽</h1>
+                <p class="resort-subtitle">七月之旅專屬活動地圖</p>
+            </header>
+            
+            <section class="controls-section">
+                <!-- 篩選器 -->
+                <div class="filter-group">
+                    <label class="filter-label">活動類型篩選</label>
+                    <div class="filter-chips">
+                        <button class="chip active" data-type="all">全部顯示</button>
+                        <button class="chip" data-type="free">館內免費</button>
+                        <button class="chip" data-type="paid">館內付費</button>
+                        <button class="chip" data-type="offsite">館外行程</button>
+                    </div>
+                </div>
+                
+                <div class="search-wrapper">
+                    <input type="text" id="activity-search" placeholder="搜尋活動名稱、地點..." />
+                </div>
+            </section>
+
+            <!-- 活動列表滾動區 -->
+            <section class="list-section">
+                <div class="list-header">
+                    <span class="results-count" id="results-count">共 0 個項目</span>
+                </div>
+                <ul id="activities-list" class="styled-scroll">
+                    <!-- 動態渲染列表項 -->
+                </ul>
+            </section>
+            
+            <footer class="sidebar-footer">
+                <div class="official-pdf-links">
+                    <h4 class="pdf-links-title">官方最新下載資源</h4>
+                    <ul class="pdf-list">
+                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/2026Nian%20Du%20Guan%20Wai%20Ban%20Ri%20You%20~Ri%20You%20Xing%20Cheng%20.pdf" target="_blank">2026年度館外半日/一日遊行程</a></li>
+                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2025/2025Nian%20Du%20%20ZEN%20SPALiao%20Cheng%20~Lan%20Biao%20.pdf" target="_blank">2025年度 ZEN SPA 完整療程</a></li>
+                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/Feng%20Wei%20Cai%20Dan%20_Guan%20Wang%20Yong%20.pdf" target="_blank">風味餐廳主廚推薦餐飲菜單</a></li>
+                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/Shen%20Nong%20Sheng%20Huo%20-Can%20Yin%20Cai%20Dan%20.pdf" target="_blank">PAARK水岸神農生活餐飲菜單</a></li>
+                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/2026Zong%20He%20Ban%20Shou%20Li%20Cu%20Xiao%20Ding%20Gou%20Dan%20_S.pdf" target="_blank">伴手禮綜合促銷訂購指南</a></li>
+                    </ul>
+                </div>
+                <div class="footer-info">
+                    <p>備註：此版本已精確導入官方2026半日遊與SPA療程數據。</p>
+                    <p>地圖已透過 Google 座標錨定並支持手繪圖層疊加。</p>
+                </div>
+            </footer>
+        </aside>
+
+        <!-- 地圖容器 -->
+        <main id="map-wrapper">
+            <div id="map"></div>
+            
+            <!-- 地圖疊加指示器 -->
+            <div id="map-overlay-info" class="glass-panel-light fade-out">
+                <div class="overlay-content">
+                    <h3 id="overlay-title">點擊地圖上的水滴標記以查看詳情</h3>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==================== 視圖二：時間總表介面 ==================== -->
+        <main id="timetable-wrapper" class="view-hidden animate-fade">
+            <div class="timetable-container">
+                <header class="timetable-header">
+                    <div class="title-group">
+                        <h2 class="timetable-title">活動時間總覽表</h2>
+                        <p class="timetable-subtitle">點擊左側時間刻度可篩選該時刻後的活動。橫軸為活動項目，縱軸為時間。</p>
+                    </div>
+                    
+                    <!-- 時間表專屬過濾器 -->
+                    <div class="timetable-filters">
+                        <button id="btn-clear-threshold" class="table-filter-chip" style="border-color: #ff7675; color: #ff7675; display: none;">🕒 清除時間過濾</button>
+                        <button class="table-filter-chip active" data-table-filter="all">全部活動</button>
+                        <button class="table-filter-chip" data-table-filter="free">免費活動</button>
+                        <button class="table-filter-chip" data-table-filter="paid">付費體驗</button>
+                        <button class="table-filter-chip" data-table-filter="offsite">館外行程</button>
+                    </div>
+                </header>
+                
+                <!-- 核心甘特圖時間軸滾動區 -->
+                <div class="scheduler-scroll-outer styled-scroll">
+                    <div class="scheduler-grid-container">
+                        <!-- 左側時間軸固定義 -->
+                        <div class="time-axis-column">
+                            <div class="axis-header-corner">時間</div>
+                            <div class="axis-time-slots" id="axis-time-slots">
+                                <!-- JS 動態生成 08:00 ~ 23:00 半小時格 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 右側活動矩陣內容區 -->
+                        <div class="scheduler-content-area">
+                            <!-- 動態生成活動列標頭與網格線 -->
+                            <div class="scheduler-header-row" id="scheduler-headers">
+                                <!-- 動態注入活動標題 -->
+                            </div>
+                            <div class="scheduler-grid-body" id="scheduler-grid-body">
+                                <!-- 背景網格線 -->
+                                <div class="grid-lines-bg" id="grid-lines-bg"></div>
+                                <!-- 動態注入活動列與 absolute 色塊 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- 載入活動數據 -->
+    <script src="activities_data.js"></script>
+    
+    <!-- 載入主程式邏輯 -->
+    <script src="app.js"></script>
+</body>
+</html>

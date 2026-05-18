@@ -1,0 +1,140 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-05-15T03:37:09Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "relation",
+      "id": 5828514,
+      "bounds": {
+        "minlat": 23.8645277,
+        "minlon": 121.5254147,
+        "maxlat": 23.867857,
+        "maxlon": 121.5302912
+      },
+      "members": [
+        {
+          "type": "way",
+          "ref": 164663930,
+          "role": "outer",
+          "geometry": [
+            {
+              "lat": 23.8674771,
+              "lon": 121.5259993
+            },
+            {
+              "lat": 23.8666486,
+              "lon": 121.5254176
+            },
+            {
+              "lat": 23.866625,
+              "lon": 121.5254147
+            },
+            {
+              "lat": 23.866573,
+              "lon": 121.5254381
+            },
+            {
+              "lat": 23.8655132,
+              "lon": 121.5270165
+            },
+            {
+              "lat": 23.8645277,
+              "lon": 121.5287012
+            },
+            {
+              "lat": 23.8651198,
+              "lon": 121.5293116
+            },
+            {
+              "lat": 23.8654045,
+              "lon": 121.5296176
+            },
+            {
+              "lat": 23.8655844,
+              "lon": 121.5298885
+            },
+            {
+              "lat": 23.8657459,
+              "lon": 121.5300484
+            },
+            {
+              "lat": 23.8659771,
+              "lon": 121.5300561
+            },
+            {
+              "lat": 23.8661151,
+              "lon": 121.5300575
+            },
+            {
+              "lat": 23.8664123,
+              "lon": 121.5300437
+            },
+            {
+              "lat": 23.8665268,
+              "lon": 121.5301607
+            },
+            {
+              "lat": 23.8666502,
+              "lon": 121.5302912
+            },
+            {
+              "lat": 23.8670701,
+              "lon": 121.5300461
+            },
+            {
+              "lat": 23.867857,
+              "lon": 121.5286267
+            }
+          ]
+        },
+        {
+          "type": "way",
+          "ref": 389662087,
+          "role": "outer",
+          "geometry": [
+            {
+              "lat": 23.867857,
+              "lon": 121.5286267
+            },
+            {
+              "lat": 23.8667713,
+              "lon": 121.5275962
+            },
+            {
+              "lat": 23.8672325,
+              "lon": 121.5270035
+            },
+            {
+              "lat": 23.8670087,
+              "lon": 121.526828
+            },
+            {
+              "lat": 23.8674771,
+              "lon": 121.5259993
+            }
+          ]
+        }
+      ],
+      "tags": {
+        "addr:city": "花蓮縣",
+        "addr:country": "TW",
+        "addr:district": "壽豐鄉",
+        "addr:full": "花蓮縣壽豐鄉共和村理想路1號",
+        "addr:housenumber": "1",
+        "addr:province": "台灣省",
+        "addr:street": "理想路",
+        "name": "理想大地渡假飯店",
+        "name:en": "Promised Land Resort & Lagoon",
+        "name:zh": "理想大地渡假飯店",
+        "tourism": "hotel",
+        "type": "multipolygon",
+        "website": "https://www.plcresort.com.tw/",
+        "wikidata": "Q111150996"
+      }
+    }
+  ]
+}
