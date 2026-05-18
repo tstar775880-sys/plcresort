@@ -299,6 +299,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }).addTo(mapGroups.attraction);
     cypressMarker.bindTooltip("水中落羽松 (豐之谷水岸絕美秘境)", { sticky: true, className: 'custom-tooltip' });
 
+    // 13.9 豐之谷 - 釣魚平台範圍 (特製木質古銅棕多邊形，呼應水岸親水垂釣氛圍)
+    L.polygon(OSM_BUILDING_FISHING_PLATFORM, {
+        color: '#d35400',       // 質感古銅棕/木質橘褐
+        weight: 2,
+        fillColor: '#e67e22',   // 溫暖橘棕填充
+        fillOpacity: 0.22,
+        lineCap: 'round',
+        lineJoin: 'round'
+    }).addTo(mapGroups.attraction).bindTooltip("釣魚平台 (親水休閒垂釣區)", { sticky: true, className: 'custom-tooltip' });
+
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
         color: '#2980b9',       // 深水藍色
