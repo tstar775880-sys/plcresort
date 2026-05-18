@@ -1845,6 +1845,35 @@ const ACTIVITIES = [
     price: "350元/人",
     desc: "探索綠地，由導覽員講解沿途自然景觀、動植物，分享生態知識。"
   },
+  {
+    id: "p14",
+    type: "paid",
+    category: "館內付費",
+    name: "魚王之爭 (釣魚)",
+    locationName: "豐之谷服務中心",
+    coords: RESORT_LOCATIONS["豐之谷服務中心"],
+    time: "08:30 - 17:00",
+    slots: [
+      { start: "08:30", end: "17:00" }
+    ],
+    price: "350元/組",
+    desc: "大自然的生態魚池，挑戰以小釣竿釣起大魚！每次以2小時為限（適用年齡12歲以上）。"
+  },
+  {
+    id: "p15",
+    type: "paid",
+    category: "館內付費",
+    name: "竹筏漂流趣",
+    locationName: "竹筏碼頭",
+    coords: RESORT_LOCATIONS["竹筏碼頭"],
+    time: "09:30 - 11:30, 14:30 - 16:30",
+    slots: [
+      { start: "09:30", end: "11:30" },
+      { start: "14:30", end: "16:30" }
+    ],
+    price: "350元/人",
+    desc: "乘坐原住民竹筏遊生態河道，介紹自然生態公園的故事，環繞生態小島觀察可愛的鳥類與小動物。"
+  },
 
   // --- 免費活動 ---
   {

@@ -1200,3 +1200,25 @@ body, html {
     pointer-events: none; /* 完全穿透鼠標事件 */
 }
 
+/* --- 動態選取活動焦點標記與呼吸動畫 (無 Emojis / 無 Icons，極致優雅動態感) --- */
+@keyframes marker-glow-pulse {
+    0% {
+        filter: drop-shadow(0 0 2px rgba(253, 203, 110, 0.8));
+        r: 11px;
+    }
+    50% {
+        filter: drop-shadow(0 0 12px rgba(253, 203, 110, 0.95));
+        r: 13.5px;
+    }
+    100% {
+        filter: drop-shadow(0 0 2px rgba(253, 203, 110, 0.8));
+        r: 11px;
+    }
+}
+
+.pulsing-focus-marker {
+    animation: marker-glow-pulse 1.6s infinite ease-in-out;
+    transform-origin: center;
+    transition: all 0.2s ease-out;
+}
+

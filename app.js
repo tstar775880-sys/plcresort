@@ -395,7 +395,8 @@ document.addEventListener("DOMContentLoaded", () => {
         currentView: 'map',        // 'map' 或 'table'
         markers: [],               // 地圖標記參考
         selectedId: null,          // 選取中的活動 ID
-        timeThreshold: null        // 時間表過濾閾值 ("HH:MM")
+        timeThreshold: null,       // 時間表過濾閾值 ("HH:MM")
+        activeFocusMarker: null    // 當前點選高亮之活動動態焦點標記
     };
 
     // 時間表基礎配置常數
@@ -537,13 +538,49 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        const targetMarker = state.markers.find(m => m.activityId === id);
-        if (targetMarker) {
+        // 移除現有的動態活動焦點標記
+        if (state.activeFocusMarker) {
+            map.removeLayer(state.activeFocusMarker);
+            state.activeFocusMarker = null;
+        }
+
+        const activity = ACTIVITIES.find(item => item.id === id);
+        if (activity && activity.coords) {
+            const typeLabel = activity.type === 'free' ? '館內免費' : (activity.type === 'paid' ? '館內付費' : '館外行程');
+            const badgeClass = activity.type === 'free' ? 'badge-free' : (activity.type === 'paid' ? 'badge-paid' : 'badge-offsite');
+            
+            // 構建極致清爽彈出框內容 (遵守零圖示、零 Emoji 規定)
+            const popupHtml = `
+                <div class="custom-popup">
+                    <span class="popup-badge ${badgeClass}">${typeLabel}</span>
+                    <h3 class="popup-title">${activity.name}</h3>
+                    <div class="popup-info-row"><span class="popup-label">地點：</span>${activity.locationName}</div>
+                    <div class="popup-info-row"><span class="popup-label">時間：</span>${activity.time}</div>
+                    <div class="popup-info-row"><span class="popup-label">費用：</span>${activity.price}</div>
+                    <p class="popup-desc">${activity.desc}</p>
+                </div>
+            `;
+
+            // 建立動態亮金色呼吸圈標記
+            state.activeFocusMarker = L.circleMarker(activity.coords, {
+                radius: 12,
+                fillColor: '#fdcb6e',   // 亮麗金色
+                color: '#ffffff',       // 耀眼白框
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0.9,
+                className: 'pulsing-focus-marker' // 套用 CSS 動畫
+            }).addTo(map);
+
+            state.activeFocusMarker.bindPopup(popupHtml, { maxWidth: 300, className: 'custom-popup-wrapper' });
+
             if (shouldPanMap) {
-                map.setView(targetMarker.getLatLng(), 18, { animate: true, duration: 0.6 });
-                setTimeout(() => { targetMarker.openPopup(); }, 450);
+                map.setView(activity.coords, 18, { animate: true, duration: 0.6 });
+                setTimeout(() => { 
+                    if (state.activeFocusMarker) state.activeFocusMarker.openPopup(); 
+                }, 500);
             } else {
-                targetMarker.openPopup();
+                state.activeFocusMarker.openPopup();
             }
         }
     }
@@ -659,13 +696,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h3 class="modal-title">${item.name}</h3>
             </div>
             <div class="modal-info-grid">
-                <div class="modal-info-label">📍 地點</div>
+                <div class="modal-info-label">地點</div>
                 <div class="modal-info-value">${item.locationName}</div>
                 
-                <div class="modal-info-label">🕒 時間</div>
+                <div class="modal-info-label">時間</div>
                 <div class="modal-info-value">${item.time}</div>
                 
-                <div class="modal-info-label">💰 費用</div>
+                <div class="modal-info-label">費用</div>
                 <div class="modal-info-value">${item.price}</div>
             </div>
             <p class="modal-desc-box">${item.desc}</p>
