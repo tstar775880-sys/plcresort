@@ -53,15 +53,17 @@ document.addEventListener("DOMContentLoaded", () => {
         let currentIndex = parseInt(carousel.dataset.initialIndex || '0', 10);
         const totalSlides = dots.length;
         
-        // 取得該地點的所有活動資料，以便在輪播切換時同步側邊欄高亮
-        const popupLatLng = e.popup.getLatLng();
-        const coords = [popupLatLng.lat, popupLatLng.lng];
+        // 從資料屬性中精準取得地標官方座標 (避免因為地圖點擊微偏導致篩選失效)
+        const coordsStr = carousel.dataset.coords;
+        if (!coordsStr) return;
+        const coords = coordsStr.split(',').map(Number);
         const coordActivities = getActivitiesAtCoords(coords);
 
         function updateCarousel(index) {
             currentIndex = index;
-            if (currentIndex < 0) currentIndex = 0;
-            if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
+            // 實現無縫循環播放！
+            if (currentIndex < 0) currentIndex = totalSlides - 1;
+            if (currentIndex >= totalSlides) currentIndex = 0;
             
             // 滑動動畫
             if (slidesInner) slidesInner.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -75,9 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
             
-            // 更新按鈕啟用狀態
-            if (prevBtn) prevBtn.disabled = currentIndex === 0;
-            if (nextBtn) nextBtn.disabled = currentIndex === totalSlides - 1;
+            // 啟用循環播放時，按鈕永遠不禁用！
+            if (prevBtn) prevBtn.disabled = false;
+            if (nextBtn) nextBtn.disabled = false;
             
             // 同步高亮左側清單，並讓清單平滑滾動到對應項！
             if (coordActivities && coordActivities[currentIndex]) {
@@ -915,7 +917,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 // 統一的精緻卡片輪播圖 (Carousel)！
                 popupHtml = `
-                    <div class="popup-carousel" id="popup-carousel-container" data-initial-index="${initialIndex}">
+                    <div class="popup-carousel" id="popup-carousel-container" data-initial-index="${initialIndex}" data-coords="${activity.coords[0]},${activity.coords[1]}">
                         <div class="carousel-window">
                             <div class="carousel-slides" id="carousel-slides-inner" style="width: ${coordActivities.length * 100}%; transform: translateX(-${initialIndex * 100}%);">
                 `;
