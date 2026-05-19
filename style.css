@@ -1181,10 +1181,25 @@ body, html {
 /* --- 推薦打卡任務活動卡片 --- */
 .checkin-quest-card {
     margin-top: 15px;
-    padding: 12px 14px;
     border-radius: 6px;
     border: 1px solid var(--border-glass);
     background: rgba(255, 255, 255, 0.04);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.quest-card-header {
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.quest-card-header:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .quest-title {
@@ -1192,8 +1207,28 @@ body, html {
     font-weight: 700;
     color: var(--accent-gold);
     letter-spacing: 1px;
-    margin-bottom: 4px;
     font-family: var(--font-serif);
+}
+
+.quest-card-caret {
+    font-size: 10px;
+    color: var(--accent-gold);
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.checkin-quest-card:not(.collapsed) .quest-card-caret {
+    transform: rotate(180deg);
+}
+
+.quest-card-content {
+    padding: 0 14px 14px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 12px;
+}
+
+.checkin-quest-card.collapsed .quest-card-content {
+    display: none !important;
 }
 
 .quest-desc {
@@ -1281,16 +1316,47 @@ body, html {
 .quest-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
     font-size: 11px;
     color: #d4e4dc;
-    cursor: pointer;
     user-select: none;
     transition: color 0.2s ease;
+    padding: 2px 4px;
+    border-radius: 4px;
 }
 
 .quest-item:hover {
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.quest-item-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.quest-item-label span {
+    transition: color 0.2s ease;
+}
+
+.quest-item-label span:hover {
+    color: var(--accent-gold);
+    text-decoration: underline;
+}
+
+.quest-locate-btn {
+    cursor: pointer;
+    font-size: 10px;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    padding: 2px;
+}
+
+.quest-locate-btn:hover {
+    opacity: 1;
+    transform: scale(1.2);
 }
 
 .quest-item input[type="checkbox"] {

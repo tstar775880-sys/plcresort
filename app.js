@@ -938,6 +938,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 state.activeFocusMarker = null;
             }
 
+            // 當切換到「館內活動 (indoor-activities)」時才顯示打卡任務，其餘隱藏！
+            const questCard = document.getElementById('checkin-quest-card');
+            if (questCard) {
+                if (state.activeFilter === 'indoor-activities') {
+                    questCard.style.display = 'block';
+                } else {
+                    questCard.style.display = 'none';
+                }
+            }
+
             syncLayerCheckboxes(state.activeFilter);
             renderMap();
         });
@@ -971,6 +981,140 @@ document.addEventListener("DOMContentLoaded", () => {
     // 清除時間過濾按鈕事件
     if (btnClearThreshold) {
         btnClearThreshold.addEventListener('click', clearTimeThreshold);
+    }
+
+    // ==================== 7.5 推薦打卡景點任務活動邏輯 ====================
+    function initCheckinQuest() {
+        const questCard = document.getElementById('checkin-quest-card');
+        const toggleBtn = document.getElementById('quest-card-toggle');
+        const checklistContainer = document.getElementById('quest-checklist');
+        const progressLabel = document.getElementById('quest-progress-label');
+        const progressBarFill = document.getElementById('quest-progress-fill');
+        
+        if (!questCard || !checklistContainer || !progressLabel || !progressBarFill) return;
+        
+        // 1. 綁定卡片展開/收合點擊監聽
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                questCard.classList.toggle('collapsed');
+            });
+        }
+        
+        // 依據初始篩選同步顯示狀態 (預設 'all-spots' 時隱藏)
+        if (state.activeFilter === 'indoor-activities') {
+            questCard.style.display = 'block';
+        } else {
+            questCard.style.display = 'none';
+        }
+        
+        // 讀取本地快取打卡紀錄
+        let savedCheckin = [];
+        try {
+            const saved = localStorage.getItem('plc_checkin_progress');
+            if (saved) {
+                savedCheckin = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error("讀取本地打卡快取失敗:", e);
+        }
+        
+        // 2. 動態渲染打卡清單項目 (結合一鍵地圖定位高亮功能)
+        checklistContainer.innerHTML = '';
+        RECOMMENDED_CHECKPOINTS.forEach((checkpoint) => {
+            const isChecked = savedCheckin.includes(checkpoint.name);
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'quest-item';
+            itemDiv.innerHTML = `
+                <label class="quest-item-label">
+                    <input type="checkbox" data-name="${checkpoint.name}" ${isChecked ? 'checked' : ''} />
+                    <span>${checkpoint.name}</span>
+                </label>
+                <span class="quest-locate-btn" title="地圖定位">📍</span>
+            `;
+            
+            // 綁定核取盒監聽事件
+            const checkbox = itemDiv.querySelector('input[type="checkbox"]');
+            checkbox.addEventListener('change', () => {
+                updateQuestProgress();
+            });
+            
+            // 點擊定位按鈕或名稱，將地圖平移並高亮對應的打卡景點
+            const locateBtn = itemDiv.querySelector('.quest-locate-btn');
+            const labelText = itemDiv.querySelector('.quest-item-label span');
+            const locateAction = () => {
+                // 將打卡景點轉換為活動物件格式以套用 highlightItem
+                const checkpointActivity = {
+                    id: `checkpoint-${checkpoint.name}`,
+                    name: checkpoint.name,
+                    type: 'checkin',
+                    locationName: "推薦打卡景點",
+                    time: "全天開放",
+                    price: "免費參觀",
+                    desc: checkpoint.desc,
+                    coords: checkpoint.coords
+                };
+                
+                // 切換至地圖導覽視窗 (如果當前在時間表)
+                const mapBtn = document.querySelector('button[data-view="map"]');
+                if (mapBtn && !mapBtn.classList.contains('active')) {
+                    mapBtn.click();
+                }
+                
+                // 自動勾選推薦打卡圖層以便使用者可以在地圖上看見
+                if (layerCheckboxes.checkin && !layerCheckboxes.checkin.checked) {
+                    layerCheckboxes.checkin.checked = true;
+                    mapGroups.checkin.addTo(map);
+                    updateSelectAllState();
+                }
+                
+                // 執行定位與高亮
+                highlightItem(checkpointActivity, true);
+            };
+            
+            locateBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                locateAction();
+            });
+            labelText.addEventListener('click', (e) => {
+                e.preventDefault(); // 防止點擊文字觸發 checkbox
+                locateAction();
+            });
+            
+            checklistContainer.appendChild(itemDiv);
+        });
+        
+        // 更新進度與比例
+        function updateQuestProgress() {
+            const checkboxes = checklistContainer.querySelectorAll('input[type="checkbox"]');
+            const checkedNames = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    checkedNames.push(cb.dataset.name);
+                }
+            });
+            
+            const count = checkedNames.length;
+            const target = 6;
+            
+            // 寫入本地快取
+            localStorage.setItem('plc_checkin_progress', JSON.stringify(checkedNames));
+            
+            // 更新進度文字
+            if (count >= target) {
+                progressLabel.textContent = `已打卡: ${count} / ${target} 則 (已達標！可至大廳兌獎)`;
+                progressLabel.style.color = '#fdcb6e'; // 達標時字體亮金色
+            } else {
+                progressLabel.textContent = `已打卡: ${count} / ${target} 則 (還差 ${target - count} 則)`;
+                progressLabel.style.color = '#ffffff'; // 未達標維持白字
+            }
+            
+            // 更新進度條長度
+            const percent = Math.min((count / target) * 100, 100);
+            progressBarFill.style.width = `${percent}%`;
+        }
+        
+        // 首次初始化進度更新
+        updateQuestProgress();
     }
 
     // 地圖空白處重置選中
@@ -1097,79 +1241,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (selectAllCheckbox) selectAllCheckbox.parentElement.style.display = 'none';
             if (layerSeparator) layerSeparator.style.display = 'none';
         }
-    }
-
-    // ==================== 7.5 推薦打卡景點任務活動邏輯 ====================
-    function initCheckinQuest() {
-        const checklistContainer = document.getElementById('quest-checklist');
-        const progressLabel = document.getElementById('quest-progress-label');
-        const progressBarFill = document.getElementById('quest-progress-fill');
-        
-        if (!checklistContainer || !progressLabel || !progressBarFill) return;
-        
-        // 讀取本地快取打卡紀錄
-        let savedCheckin = [];
-        try {
-            const saved = localStorage.getItem('plc_checkin_progress');
-            if (saved) {
-                savedCheckin = JSON.parse(saved);
-            }
-        } catch (e) {
-            console.error("讀取本地打卡快取失敗:", e);
-        }
-        
-        // 動態渲染打卡清單核取盒
-        checklistContainer.innerHTML = '';
-        RECOMMENDED_CHECKPOINTS.forEach((checkpoint) => {
-            const isChecked = savedCheckin.includes(checkpoint.name);
-            const label = document.createElement('label');
-            label.className = 'quest-item';
-            label.innerHTML = `
-                <input type="checkbox" data-name="${checkpoint.name}" ${isChecked ? 'checked' : ''} />
-                <span>${checkpoint.name}</span>
-            `;
-            
-            // 綁定核取盒監聽事件
-            const checkbox = label.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', () => {
-                updateQuestProgress();
-            });
-            
-            checklistContainer.appendChild(label);
-        });
-        
-        // 更新進度與比例
-        function updateQuestProgress() {
-            const checkboxes = checklistContainer.querySelectorAll('input[type="checkbox"]');
-            const checkedNames = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    checkedNames.push(cb.dataset.name);
-                }
-            });
-            
-            const count = checkedNames.length;
-            const target = 6;
-            
-            // 寫入本地快取
-            localStorage.setItem('plc_checkin_progress', JSON.stringify(checkedNames));
-            
-            // 更新進度文字
-            if (count >= target) {
-                progressLabel.textContent = `已打卡: ${count} / ${target} 則 (已達標！可至大廳兌獎)`;
-                progressLabel.style.color = '#fdcb6e'; // 達標時字體亮金色
-            } else {
-                progressLabel.textContent = `已打卡: ${count} / ${target} 則 (還差 ${target - count} 則)`;
-                progressLabel.style.color = '#ffffff'; // 未達標維持白字
-            }
-            
-            // 更新進度條長度
-            const percent = Math.min((count / target) * 100, 100);
-            progressBarFill.style.width = `${percent}%`;
-        }
-        
-        // 首次初始化進度更新
-        updateQuestProgress();
     }
 
     // ==================== 7.8 手機版底部抽屜 (Sliding Bottom Sheet) 控制 ====================
