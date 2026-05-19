@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.2,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(mapGroups.accommodation);
+    }).addTo(map);
     buildingLobbyPoly.bindTooltip("接待大廳 (Lobby 建築主體)", { sticky: true, className: 'custom-tooltip' });
     bindLocationClick(buildingLobbyPoly, "接待大廳", RESORT_LOCATIONS["接待大廳"]);
 
@@ -549,6 +549,29 @@ document.addEventListener("DOMContentLoaded", () => {
         state.markers.forEach(m => map.removeLayer(m));
         state.markers = [];
         elList.innerHTML = '';
+
+        if (state.activeFilter === 'offsite-activities') {
+            // 建立一個精緻奢華的「飯店門口 (館外活動集合點)」標記並自動在地圖上呈現
+            const offsiteBaseMarker = L.circleMarker(RESORT_LOCATIONS["飯店門口"], {
+                radius: 9,
+                fillColor: '#e74c3c',   // 精緻石榴紅
+                color: '#ffffff',       // 純白邊框
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.95
+            }).addTo(map);
+            
+            offsiteBaseMarker.bindTooltip("飯店大廳門口 (所有館外行程之集合與出發點)", { 
+                permanent: true, 
+                direction: 'top', 
+                className: 'custom-tooltip-permanent' 
+            });
+            
+            // 點擊此標記也可以觸發點擊事件，查看此處所有的館外活動！
+            bindLocationClick(offsiteBaseMarker, "飯店大廳門口", RESORT_LOCATIONS["飯店門口"]);
+            
+            state.markers.push(offsiteBaseMarker);
+        }
 
         // 座標偏移計算器 (防重疊)
         const coordOffsetCount = {};

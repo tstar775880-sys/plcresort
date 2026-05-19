@@ -1627,3 +1627,20 @@ body, html {
     font-weight: 700;
 }
 
+/* --- 館外行程集合點永久標記氣泡 --- */
+.custom-tooltip-permanent {
+    background: rgba(11, 34, 28, 0.95) !important;
+    border: 1px solid rgba(231, 76, 60, 0.6) !important; /* 紅色微透邊框 */
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    font-family: var(--font-sans) !important;
+}
+
+.custom-tooltip-permanent::before {
+    border-top-color: rgba(231, 76, 60, 0.6) !important;
+}
+
