@@ -546,6 +546,74 @@ body, html {
     border-top: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
+/* --- 多活動疊加彈出框樣式 --- */
+.consolidated-popup {
+    max-height: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-header-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 6px;
+}
+
+.popup-main-location-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    font-family: var(--font-serif);
+    margin: 0;
+}
+
+.consolidated-sub {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 2px;
+    margin-bottom: 8px;
+}
+
+.popup-consolidated-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 180px;
+    padding-right: 4px;
+}
+
+.popup-consolidated-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 8px 10px;
+    transition: all 0.2s ease;
+}
+
+.popup-consolidated-item.selected-highlight {
+    background: rgba(207, 160, 86, 0.08);
+    border-color: var(--accent-gold);
+    box-shadow: inset 3px 0 0 var(--accent-gold);
+}
+
+.popup-item-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.popup-item-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
 .leaflet-container a.leaflet-popup-close-button { color: #ffffff !important; padding: 8px !important; }
 
 

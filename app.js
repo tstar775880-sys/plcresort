@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.restaurant);
     buildingFengweiPoly.bindTooltip("風味餐廳 (建築主體)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(buildingFengweiPoly, "風味餐廳", RESORT_LOCATIONS["風味餐廳"]);
 
     // 5. 豪雍精品 建築範圍 (桃紫色 + 填充)
     const buildingHaoyongPoly = L.polygon(OSM_BUILDING_HAOYONG, {
@@ -107,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction);
     buildingHaoyongPoly.bindTooltip("豪雍精品 (建築主體)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(buildingHaoyongPoly, "豪雍精品", RESORT_LOCATIONS["豪雍精品"]);
 
     // 6. 接待大廳 (Lobby) 建築範圍 (高貴褐金 + 填充)
     const buildingLobbyPoly = L.polygon(OSM_BUILDING_LOBBY, {
@@ -118,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.accommodation);
     buildingLobbyPoly.bindTooltip("接待大廳 (Lobby 建築主體)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(buildingLobbyPoly, "接待大廳", RESORT_LOCATIONS["接待大廳"]);
 
     // 7. 星空電影 建築範圍 (亮紫色 + 填充，營造璀璨星空色彩)
     const starryMoviePoly = L.polygon(OSM_AREA_STARRY_MOVIE, {
@@ -129,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction);
     starryMoviePoly.bindTooltip("星空電影", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(starryMoviePoly, "星空電影", RESORT_LOCATIONS["星空電影"]);
 
     // 8. 射箭場 範圍 (亮黃金橘 + 虛線填充)
     const areaArcheryPoly = L.polygon(OSM_AREA_ARCHERY, {
@@ -141,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction);
     areaArcheryPoly.bindTooltip("射箭場", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(areaArcheryPoly, "射箭場", RESORT_LOCATIONS["射箭場"]);
 
     // 9. 塞維亞草原 (精準點位 - 特製綠色圓點)
     const sevilleGrasslandMarker = L.circleMarker(RESORT_LOCATIONS["賽維亞草原"], {
@@ -152,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.9
     }).addTo(mapGroups.attraction);
     sevilleGrasslandMarker.bindTooltip("塞維亞草原 (Google Map 抓取點位)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(sevilleGrasslandMarker, "塞維亞草原", RESORT_LOCATIONS["賽維亞草原"]);
 
     // 10. 瑜珈平台 (精準點位 - 特製圓形標記)
     const yogaPlatformMarker = L.circleMarker(RESORT_LOCATIONS["瑜珈平台"], {
@@ -163,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.85
     }).addTo(mapGroups.attraction);
     yogaPlatformMarker.bindTooltip("瑜珈平台 (戶外露台點位)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(yogaPlatformMarker, "瑜珈平台", RESORT_LOCATIONS["瑜珈平台"]);
 
     // 10.2 星巴克花蓮理想門市 (特製星巴克綠色圓點標記，置於 A2 水岸區)
     const starbucksMarker = L.circleMarker(RESORT_LOCATIONS["星巴克花蓮理想門市"], {
@@ -174,6 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.95
     }).addTo(mapGroups.restaurant);
     starbucksMarker.bindTooltip("星巴克花蓮理想門市 (全台最美童話屋星巴克)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(starbucksMarker, "星巴克花蓮理想門市", RESORT_LOCATIONS["星巴克花蓮理想門市"]);
 
     // 10.5 運河橋樑精準點位標記 (西班牙古典赤磚紅圓點，展現西班牙古風運河水鄉之美)
     const bridges = [
@@ -303,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.95
     }).addTo(mapGroups.attraction);
     peacockIslandMarker.bindTooltip("孔雀島 (親近可愛孔雀與小山羊)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(peacockIslandMarker, "孔雀島", RESORT_LOCATIONS["孔雀島"]);
 
     // 13.8 豐之谷 - 水中落羽松 (特製落羽杉深綠圓形標記)
     const cypressMarker = L.circleMarker(RESORT_LOCATIONS["水中落羽松"], {
@@ -314,46 +323,55 @@ document.addEventListener("DOMContentLoaded", () => {
         fillOpacity: 0.9
     }).addTo(mapGroups.attraction);
     cypressMarker.bindTooltip("水中落羽松 (豐之谷水岸絕美秘境)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(cypressMarker, "水中落羽松", RESORT_LOCATIONS["水中落羽松"]);
 
     // 13.9 豐之谷 - 釣魚平台範圍 (特製木質古銅棕多邊形，呼應水岸親水垂釣氛圍)
-    L.polygon(OSM_BUILDING_FISHING_PLATFORM, {
+    const fishingPlatformPoly = L.polygon(OSM_BUILDING_FISHING_PLATFORM, {
         color: '#d35400',       // 質感古銅棕/木質橘褐
         weight: 2,
         fillColor: '#e67e22',   // 溫暖橘棕填充
         fillOpacity: 0.22,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(mapGroups.attraction).bindTooltip("釣魚平台 (親水休閒垂釣區)", { sticky: true, className: 'custom-tooltip' });
+    }).addTo(mapGroups.attraction);
+    fishingPlatformPoly.bindTooltip("釣魚平台 (親水休閒垂釣區)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(fishingPlatformPoly, "釣魚平台", RESORT_LOCATIONS["豐之谷服務中心"]);
 
     // 13.95 豐之谷 - 湖畔小憩範圍 (特製薄荷翠綠多邊形，彰顯湖畔林蔭漫步與休憩意境)
-    L.polygon(OSM_BUILDING_LAKESIDE_REST, {
+    const lakesideRestPoly = L.polygon(OSM_BUILDING_LAKESIDE_REST, {
         color: '#10ac84',       // 翡翠薄荷綠邊框
         weight: 2,
         fillColor: '#1dd1a1',   // 亮翠綠填充
         fillOpacity: 0.15,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(mapGroups.attraction).bindTooltip("湖畔小憩 (水岸休閒漫步區)", { sticky: true, className: 'custom-tooltip' });
+    }).addTo(mapGroups.attraction);
+    lakesideRestPoly.bindTooltip("湖畔小憩 (水岸休閒漫步區)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(lakesideRestPoly, "湖畔小憩", RESORT_LOCATIONS["湖畔小憩"]);
 
     // 13.98 豐之谷 - 親子餵魚區範圍 (特製珊瑚粉橘多邊形，散發活潑歡樂親子互動氛圍)
-    L.polygon(OSM_BUILDING_FISH_FEEDING_AREA, {
+    const fishFeedingPoly = L.polygon(OSM_BUILDING_FISH_FEEDING_AREA, {
         color: '#ff7675',       // 珊瑚粉橘邊框
         weight: 2,
         fillColor: '#ff7675',   // 珊瑚粉填充
         fillOpacity: 0.22,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(mapGroups.attraction).bindTooltip("親子餵魚區 (生態親水平台)", { sticky: true, className: 'custom-tooltip' });
+    }).addTo(mapGroups.attraction);
+    fishFeedingPoly.bindTooltip("親子餵魚區 (生態親水平台)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(fishFeedingPoly, "親子餵魚區", RESORT_LOCATIONS["竹筏碼頭"]);
 
     // 13.99 豐之谷 - 服務中心與單車租借站 (特製質感紅磚色多邊形，彰顯核心服務地標)
-    L.polygon(OSM_BUILDING_FENGZHIGU_SERVICE_CENTER, {
+    const serviceCenterPoly = L.polygon(OSM_BUILDING_FENGZHIGU_SERVICE_CENTER, {
         color: '#d35400',       // 質感古銅磚紅
         weight: 2,
         fillColor: '#e67e22',   // 溫潤橘紅填充
         fillOpacity: 0.26,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(mapGroups.attraction).bindTooltip("豐之谷服務中心 / 單車租借站 (生態體驗與活動報名處)", { sticky: true, className: 'custom-tooltip' });
+    }).addTo(mapGroups.attraction);
+    serviceCenterPoly.bindTooltip("豐之谷服務中心 / 單車租借站 (生態體驗與活動報名處)", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(serviceCenterPoly, "豐之谷服務中心", RESORT_LOCATIONS["豐之谷服務中心"]);
 
     // 14. 公共廁所位置 (水藍色醒目框，方便房客迅速搜尋)
     const toiletStyle = {
@@ -370,14 +388,16 @@ document.addEventListener("DOMContentLoaded", () => {
     L.polygon(OSM_BUILDING_FENGZHIGU_TOILET, toiletStyle).addTo(mapGroups.toilet).bindTooltip("豐之谷生態公園公共廁所", { sticky: true, className: 'custom-tooltip' });
 
     // 15. 里拉餐廳主體 (精緻磚橘色)
-    L.polygon(OSM_BUILDING_LIRA_RESTAURANT, {
+    const liraRestaurantPoly = L.polygon(OSM_BUILDING_LIRA_RESTAURANT, {
         color: '#d35400',       // 磚橘色
         weight: 2,
         fillColor: '#e67e22',   // 柔橘色
         fillOpacity: 0.25,
         lineCap: 'round',
         lineJoin: 'round'
-    }).addTo(mapGroups.restaurant).bindTooltip("里拉餐廳", { sticky: true, className: 'custom-tooltip' });
+    }).addTo(mapGroups.restaurant);
+    liraRestaurantPoly.bindTooltip("里拉餐廳", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(liraRestaurantPoly, "里拉餐廳", RESORT_LOCATIONS["里拉餐廳"]);
     // 16. 理想大地推薦打卡景點 (精緻落落大方圓形標記，專屬 Sunset Rose 奢華調)
     RECOMMENDED_CHECKPOINTS.forEach(checkpoint => {
         const checkinMarker = L.circleMarker(checkpoint.coords, {
@@ -397,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ==================== 2. 狀態管理器 ====================
     const state = {
-        activeFilter: 'all-spots', // 地圖篩選器
+        activeFilter: 'indoor-activities', // 地圖篩選器
         tableFilter: 'all',        // 時間表專屬篩選器
         searchQuery: '',           // 地圖搜尋字串
         currentView: 'map',        // 'map' 或 'table'
@@ -544,6 +564,86 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // 依據座標取得目前篩選結果中在此位置的所有活動與打卡景點
+    function getActivitiesAtCoords(coords) {
+        if (!coords) return [];
+        const lat = coords[0];
+        const lng = coords[1];
+        
+        let list = [];
+        let rawData = [];
+        
+        if (state.activeFilter === 'indoor-activities') {
+            rawData = ACTIVITIES.filter(item => item.type === 'free' || item.type === 'paid');
+        } else if (state.activeFilter === 'offsite-activities') {
+            rawData = ACTIVITIES.filter(item => item.type === 'offsite');
+        } else {
+            rawData = ACTIVITIES;
+        }
+
+        // 搜尋過濾
+        const query = state.searchQuery.toLowerCase();
+        let filteredData = rawData.filter(item => {
+            const matchesSearch = !query || 
+                                  item.name.toLowerCase().includes(query) || 
+                                  item.locationName.toLowerCase().includes(query) || 
+                                  item.desc.toLowerCase().includes(query);
+            return matchesSearch;
+        });
+
+        // 找出在此座標的所有符合活動
+        filteredData.forEach(item => {
+            if (item.coords && 
+                Math.abs(item.coords[0] - lat) < 0.0001 && 
+                Math.abs(item.coords[1] - lng) < 0.0001) {
+                list.push(item);
+            }
+        });
+
+        // 如果開啟了打卡圖層，也加入符合的打卡景點
+        const checkinCheckbox = document.getElementById('layer-checkin');
+        if (checkinCheckbox && checkinCheckbox.checked) {
+            RECOMMENDED_CHECKPOINTS.forEach((cp, idx) => {
+                if (cp.coords && 
+                    Math.abs(cp.coords[0] - lat) < 0.0001 && 
+                    Math.abs(cp.coords[1] - lng) < 0.0001) {
+                    list.push({
+                        id: `checkpoint-${cp.name}`,
+                        name: cp.name,
+                        type: 'checkin',
+                        locationName: "推薦打卡景點",
+                        time: "全天開放",
+                        price: "免費參觀",
+                        desc: cp.desc,
+                        coords: cp.coords
+                    });
+                }
+            });
+        }
+        
+        return list;
+    }
+
+    // 綁定地圖上建築框框或點點的點擊事件，以自動尋找該地點之活動並彈出清單！
+    function bindLocationClick(layer, locationName, coords) {
+        if (!layer) return;
+        layer.on('click', (e) => {
+            L.DomEvent.stopPropagation(e); // 防止地圖點擊事件干擾
+            
+            const list = getActivitiesAtCoords(coords);
+            if (list.length > 0) {
+                // 如果有活動，高亮並顯示第一個活動項目（這會自動畫出黃金呼吸圈並載入所有疊加活動的 Popup）
+                highlightItem(list[0].id, false);
+            } else {
+                // 如果沒有當前分類的活動，顯示一個基礎的說明 Popup
+                L.popup()
+                    .setLatLng(coords)
+                    .setContent(`<div class="custom-popup"><h3 class="popup-title">${locationName}</h3><p class="popup-desc">目前此分類下無排定活動項目。</p></div>`)
+                    .openOn(map);
+            }
+        });
+    }
+
     function highlightItem(id, shouldPanMap) {
         state.selectedId = id;
         const items = elList.querySelectorAll('.activity-item');
@@ -579,27 +679,89 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
             }
         }
+        
+        // 額外處理從打卡任務清單點過來的定位
+        if (!activity && typeof id === 'string' && id.startsWith('checkpoint-')) {
+            const cpName = id.replace('checkpoint-', '');
+            const cp = RECOMMENDED_CHECKPOINTS.find(item => item.name === cpName);
+            if (cp) {
+                activity = {
+                    id: id,
+                    type: 'checkin',
+                    name: cp.name,
+                    locationName: "推薦打卡景點",
+                    time: "全天開放",
+                    price: "免費參觀",
+                    desc: cp.desc,
+                    coords: cp.coords
+                };
+            }
+        }
 
         if (activity && activity.coords) {
-            const typeLabel = activity.type === 'free' ? '館內免費' : 
-                              (activity.type === 'paid' ? '館內付費' : 
-                              (activity.type === 'offsite' ? '館外行程' : '推薦打卡'));
-
-            const badgeClass = activity.type === 'free' ? 'badge-free' : 
-                               (activity.type === 'paid' ? 'badge-paid' : 
-                               (activity.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
+            // 找出所有與此活動相同座標的活動項目！
+            const coordActivities = getActivitiesAtCoords(activity.coords);
             
-            // 構建極致清爽彈出框內容 (遵守零圖示、零 Emoji 規定)
-            const popupHtml = `
-                <div class="custom-popup">
-                    <span class="popup-badge ${badgeClass}">${typeLabel}</span>
-                    <h3 class="popup-title">${activity.name}</h3>
-                    <div class="popup-info-row"><span class="popup-label">地點：</span>${activity.locationName}</div>
-                    <div class="popup-info-row"><span class="popup-label">時間：</span>${activity.time}</div>
-                    <div class="popup-info-row"><span class="popup-label">費用：</span>${activity.price}</div>
-                    <p class="popup-desc">${activity.desc}</p>
-                </div>
-            `;
+            let popupHtml = '';
+            if (coordActivities.length <= 1) {
+                // 單一活動：原先的極致清爽彈出框
+                const act = coordActivities[0] || activity;
+                const typeLabel = act.type === 'free' ? '館內免費' : 
+                                  (act.type === 'paid' ? '館內付費' : 
+                                  (act.type === 'offsite' ? '館外行程' : '推薦打卡'));
+                const badgeClass = act.type === 'free' ? 'badge-free' : 
+                                   (act.type === 'paid' ? 'badge-paid' : 
+                                   (act.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
+                
+                popupHtml = `
+                    <div class="custom-popup">
+                        <span class="popup-badge ${badgeClass}">${typeLabel}</span>
+                        <h3 class="popup-title">${act.name}</h3>
+                        <div class="popup-info-row"><span class="popup-label">地點：</span>${act.locationName}</div>
+                        <div class="popup-info-row"><span class="popup-label">時間：</span>${act.time}</div>
+                        <div class="popup-info-row"><span class="popup-label">費用：</span>${act.price}</div>
+                        <p class="popup-desc">${act.desc}</p>
+                    </div>
+                `;
+            } else {
+                // 多個活動疊加：構建 consolidated 滾動彈出框！
+                popupHtml = `
+                    <div class="custom-popup consolidated-popup styled-scroll">
+                        <div class="popup-header-main">
+                            <span class="popup-badge badge-checkin">多項活動地點</span>
+                            <h3 class="popup-main-location-title">${activity.locationName}</h3>
+                        </div>
+                        <p class="consolidated-sub">此地點共有 ${coordActivities.length} 個項目：</p>
+                        <div class="popup-consolidated-list styled-scroll">
+                `;
+                
+                coordActivities.forEach(act => {
+                    const isSelected = act.id === id;
+                    const typeLabel = act.type === 'free' ? '館內免費' : 
+                                      (act.type === 'paid' ? '館內付費' : 
+                                      (act.type === 'offsite' ? '館外行程' : '推薦打卡'));
+                    const badgeClass = act.type === 'free' ? 'badge-free' : 
+                                       (act.type === 'paid' ? 'badge-paid' : 
+                                       (act.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
+                    
+                    popupHtml += `
+                        <div class="popup-consolidated-item ${isSelected ? 'selected-highlight' : ''}">
+                            <div class="popup-item-header">
+                                <span class="popup-badge ${badgeClass}">${typeLabel}</span>
+                                <h4 class="popup-item-name">${act.name}</h4>
+                            </div>
+                            <div class="popup-info-row"><span class="popup-label">時間：</span>${act.time}</div>
+                            <div class="popup-info-row"><span class="popup-label">費用：</span>${act.price}</div>
+                            <p class="popup-desc">${act.desc}</p>
+                        </div>
+                    `;
+                });
+                
+                popupHtml += `
+                        </div>
+                    </div>
+                `;
+            }
 
             // 建立動態亮金色呼吸圈標記
             state.activeFocusMarker = L.circleMarker(activity.coords, {
