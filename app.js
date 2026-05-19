@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fishingPlatformPoly.bindTooltip("釣魚平台 (親水休閒垂釣區)", { sticky: true, className: 'custom-tooltip' });
     bindLocationClick(fishingPlatformPoly, "釣魚平台", RESORT_LOCATIONS["豐之谷服務中心"]);
 
-    // 13.95 豐之谷 - 湖畔小憩範圍 (特製薄荷翠綠多邊形，彰顯湖畔林蔭漫步與休憩意境)
+    // 13.95 豐之谷 - 湖光山舍範圍 (特製薄荷翠綠多邊形，彰顯湖畔林蔭漫步與休憩意境)
     const lakesideRestPoly = L.polygon(OSM_BUILDING_LAKESIDE_REST, {
         color: '#10ac84',       // 翡翠薄荷綠邊框
         weight: 2,
@@ -457,8 +457,8 @@ document.addEventListener("DOMContentLoaded", () => {
         lineCap: 'round',
         lineJoin: 'round'
     }).addTo(mapGroups.attraction);
-    lakesideRestPoly.bindTooltip("湖畔小憩 (水岸休閒漫步區)", { sticky: true, className: 'custom-tooltip' });
-    bindLocationClick(lakesideRestPoly, "湖畔小憩", RESORT_LOCATIONS["湖畔小憩"]);
+    lakesideRestPoly.bindTooltip("湖光山舍", { sticky: true, className: 'custom-tooltip' });
+    bindLocationClick(lakesideRestPoly, "湖光山舍", RESORT_LOCATIONS["湖光山舍"]);
 
     // 13.98 豐之谷 - 親子餵魚區範圍 (特製珊瑚粉橘多邊形，散發活潑歡樂親子互動氛圍)
     const fishFeedingPoly = L.polygon(OSM_BUILDING_FISH_FEEDING_AREA, {
