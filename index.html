@@ -19,6 +19,77 @@
 </head>
 <body>
 
+    <!-- 手機版漢堡選單按鈕 (僅在手機端顯示) -->
+    <button id="mobile-menu-btn" class="mobile-menu-toggle-btn glass-panel-light">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+    </button>
+
+    <!-- 手機版側邊快捷導覽選單 (Drawer) -->
+    <div id="mobile-drawer" class="mobile-nav-drawer glass-panel">
+        <div class="drawer-header-brand">
+            <span class="resort-prefix">PROMISELAND RESORT</span>
+            <h2 class="drawer-brand-title">理想導覽選單</h2>
+            <button id="drawer-close-btn" class="drawer-close-icon">&times;</button>
+        </div>
+        <div class="drawer-scroll-content styled-scroll">
+            <!-- 視圖切換區 -->
+            <div class="drawer-section">
+                <h3 class="drawer-section-title">視圖切換</h3>
+                <div class="drawer-view-buttons">
+                    <button class="drawer-view-btn active" data-view="map">地圖導覽</button>
+                    <button class="drawer-view-btn" data-view="table">時間總表</button>
+                </div>
+            </div>
+            
+            <!-- 圖層控制區 -->
+            <div class="drawer-section">
+                <h3 class="drawer-section-title">地圖圖層顯示</h3>
+                <div class="drawer-layer-options">
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-select-all">
+                        <span style="font-weight: 700; color: var(--accent-gold);">全選 / 取消</span>
+                    </label>
+                    <div style="height: 1px; background: rgba(255, 255, 255, 0.1); margin: 6px 0;"></div>
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-restaurant">
+                        <span>餐廳</span>
+                    </label>
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-toilet">
+                        <span>廁所</span>
+                    </label>
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-bridge">
+                        <span>橋樑</span>
+                    </label>
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-attraction">
+                        <span>景點</span>
+                    </label>
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-dock">
+                        <span>碼頭</span>
+                    </label>
+                    <label class="drawer-layer-option">
+                        <input type="checkbox" id="drawer-layer-parking">
+                        <span>停車場</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 官方下載區 -->
+            <div class="drawer-section">
+                <h3 class="drawer-section-title">理想官方資源</h3>
+                <button id="drawer-downloads-btn" class="drawer-trigger-downloads-btn">官方下載專區</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 抽屜背景遮罩 (Backdrop) -->
+    <div id="drawer-backdrop" class="drawer-overlay-backdrop"></div>
+
     <!-- 頂部視圖切換按鈕 -->
     <div id="view-switcher" class="view-toggle-container glass-panel-light">
         <button class="toggle-btn active" data-view="map">地圖導覽</button>

@@ -1672,6 +1672,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (selectAllCheckbox) selectAllCheckbox.parentElement.style.display = 'none';
             if (layerSeparator) layerSeparator.style.display = 'none';
         }
+        
+        // 同步手機版抽屜中的圖層勾選狀態與顯示隱藏！
+        if (typeof window.syncDrawerCheckboxes === 'function') {
+            window.syncDrawerCheckboxes();
+        }
     }
 
     // ==================== 7.8 手機版底部抽屜 (Sliding Bottom Sheet) 控制 ====================
@@ -1692,6 +1697,136 @@ document.addEventListener("DOMContentLoaded", () => {
         if (handle) handle.addEventListener('click', toggleSidebar);
         if (header) header.addEventListener('click', toggleSidebar);
     }
+
+    // ==================== 7.8.5 手機版側邊快捷導覽選單 (Navigation Drawer) 控制 ====================
+    function initMobileDrawer() {
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('drawer-close-btn');
+        const drawer = document.getElementById('mobile-drawer');
+        const backdrop = document.getElementById('drawer-backdrop');
+        const downloadsBtn = document.getElementById('drawer-downloads-btn');
+        
+        if (!drawer || !backdrop) return;
+        
+        function openDrawer() {
+            drawer.classList.add('open');
+            backdrop.classList.add('active');
+            if (typeof window.syncDrawerCheckboxes === 'function') {
+                window.syncDrawerCheckboxes();
+            }
+            
+            // 同步抽屜中的視圖切換按鈕狀態
+            const activeView = state.activeView || 'map';
+            document.querySelectorAll('.drawer-view-btn').forEach(btn => {
+                if (btn.dataset.view === activeView) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            backdrop.classList.remove('active');
+        }
+        
+        if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+        if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+        if (backdrop) backdrop.addEventListener('click', closeDrawer);
+        
+        // 1. 視圖切換按鈕點擊同步
+        document.querySelectorAll('.drawer-view-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const targetView = e.target.dataset.view;
+                
+                // 找出主畫面的視圖切換按鈕並點擊它
+                document.querySelectorAll('.toggle-btn').forEach(mainBtn => {
+                    if (mainBtn.dataset.view === targetView) {
+                        mainBtn.click();
+                    }
+                });
+                
+                closeDrawer();
+            });
+        });
+        
+        // 2. 官方下載按鈕同步
+        if (downloadsBtn) {
+            downloadsBtn.addEventListener('click', () => {
+                closeDrawer();
+                const mainDownloadsBtn = document.getElementById('btn-official-downloads');
+                if (mainDownloadsBtn) mainDownloadsBtn.click();
+            });
+        }
+        
+        // 3. 雙向同步：當主核取盒變更時，自動更新抽屜核取盒；當抽屜核取盒變更時，觸發主核取盒變更
+        const mapIds = {
+            'layer-select-all': 'drawer-layer-select-all',
+            'layer-restaurant': 'drawer-layer-restaurant',
+            'layer-toilet': 'drawer-layer-toilet',
+            'layer-bridge': 'drawer-layer-bridge',
+            'layer-attraction': 'drawer-layer-attraction',
+            'layer-dock': 'drawer-layer-dock',
+            'layer-parking': 'drawer-layer-parking'
+        };
+        
+        // 綁定抽屜 -> 主核取盒
+        Object.keys(mapIds).forEach(mainId => {
+            const mainEl = document.getElementById(mainId);
+            const drawerId = mapIds[mainId];
+            const drawerEl = document.getElementById(drawerId);
+            
+            if (mainEl && drawerEl) {
+                drawerEl.addEventListener('change', (e) => {
+                    mainEl.checked = e.target.checked;
+                    mainEl.dispatchEvent(new Event('change'));
+                });
+                
+                // 綁定主核取盒 -> 抽屜 (確保主畫面全選/取消時，抽屜同步更新)
+                mainEl.addEventListener('change', () => {
+                    drawerEl.checked = mainEl.checked;
+                });
+            }
+        });
+    }
+
+    // 全域導出 syncDrawerCheckboxes 以便外部和初始化呼叫
+    window.syncDrawerCheckboxes = function() {
+        const mapIds = {
+            'layer-select-all': 'drawer-layer-select-all',
+            'layer-restaurant': 'drawer-layer-restaurant',
+            'layer-toilet': 'drawer-layer-toilet',
+            'layer-bridge': 'drawer-layer-bridge',
+            'layer-attraction': 'drawer-layer-attraction',
+            'layer-dock': 'drawer-layer-dock',
+            'layer-parking': 'drawer-layer-parking'
+        };
+        Object.keys(mapIds).forEach(mainId => {
+            const mainEl = document.getElementById(mainId);
+            const drawerEl = document.getElementById(mapIds[mainId]);
+            if (mainEl && drawerEl) {
+                drawerEl.checked = mainEl.checked;
+                // 根據主畫面的圖層可見度隱藏或顯示抽屜中的對應選項
+                if (mainEl.parentElement.style.display === 'none') {
+                    drawerEl.parentElement.style.display = 'none';
+                } else {
+                    drawerEl.parentElement.style.display = 'flex';
+                }
+            }
+        });
+        
+        // 如果全選被隱藏了，抽屜的分隔線也應隱藏
+        const selectAllMain = document.getElementById('layer-select-all');
+        const drawerSelectAll = document.getElementById('drawer-layer-select-all');
+        if (selectAllMain && drawerSelectAll) {
+            if (selectAllMain.parentElement.style.display === 'none') {
+                drawerSelectAll.parentElement.style.display = 'none';
+            } else {
+                drawerSelectAll.parentElement.style.display = 'flex';
+            }
+        }
+    };
 
     // ==================== 7.9 地圖圖層面板摺疊控制 ====================
     function initCollapsibleLayerControl() {
@@ -1727,6 +1862,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 初始化手機版底部抽屜控制
     initMobileBottomSheet();
+
+    // 初始化手機版側邊快捷導覽選單
+    initMobileDrawer();
 
     // 初始化地圖圖層摺疊控制
     initCollapsibleLayerControl();
