@@ -685,16 +685,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // 為每個有活動的地點繪製一個精緻圓標記 (湖光山舍及其附屬空間皆直接綁定在建築框框上，排除重疊圓點)
+            // 追蹤已繪製標記的座標，避免完全重合的重複繪製
+            const drawnCoords = new Set();
+
+            // 為每個有活動的地點繪製一個精緻圓標記 (保留「湖光山舍/湖畔小憩」主體綠色圓標，排除附屬的休閒中心與娛樂室圓點以防視覺擁擠)
             Object.values(locationsGroup).forEach(loc => {
-                if (
-                    loc.name === '湖光山舍' || 
-                    loc.name === '湖畔小憩' || 
-                    loc.name === '休閒中心' || 
-                    loc.name === '娛樂室'
-                ) {
+                if (loc.name === '休閒中心' || loc.name === '娛樂室') {
                     return;
                 }
+
+                const coordKey = `${loc.coords[0].toFixed(5)},${loc.coords[1].toFixed(5)}`;
+                if (drawnCoords.has(coordKey)) {
+                    return;
+                }
+                drawnCoords.add(coordKey);
                 
                 const hasFree = loc.activities.some(act => act.type === 'free');
                 const hasPaid = loc.activities.some(act => act.type === 'paid');
