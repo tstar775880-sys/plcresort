@@ -572,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     fillOpacity: 0.35
                 });
                 buildingLobbyPoly.unbindTooltip();
-                buildingLobbyPoly.bindTooltip("接待大廳 (所有館外行程之集合與出發點)", { 
+                buildingLobbyPoly.bindTooltip("接待大廳 (共5個項目)", { 
                     permanent: true, 
                     direction: 'center', 
                     className: 'custom-tooltip-permanent' 
@@ -737,7 +737,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const list = getActivitiesAtCoords(coords);
             if (list.length > 0) {
                 // 如果有活動，高亮並顯示第一個活動項目（這會自動畫出黃金呼吸圈並載入所有疊加活動的 Popup）
-                highlightItem(list[0].id, false);
+                highlightItem(list[0].id, false, false);
             } else {
                 // 如果沒有當前分類的活動，顯示一個基礎的說明 Popup
                 L.popup()
@@ -748,7 +748,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function highlightItem(id, shouldPanMap) {
+    function highlightItem(id, shouldPanMap, showSingleOnly = true) {
         state.selectedId = id;
         const items = elList.querySelectorAll('.activity-item');
         items.forEach(item => {
@@ -807,9 +807,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const coordActivities = getActivitiesAtCoords(activity.coords);
             
             let popupHtml = '';
-            if (coordActivities.length <= 1) {
+            if (showSingleOnly || coordActivities.length <= 1) {
                 // 單一活動：原先的極致清爽彈出框
-                const act = coordActivities[0] || activity;
+                const act = activity;
                 const typeLabel = act.type === 'free' ? '館內免費' : 
                                   (act.type === 'paid' ? '館內付費' : 
                                   (act.type === 'offsite' ? '館外行程' : '推薦打卡'));
