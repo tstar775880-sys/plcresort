@@ -389,7 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ==================== 2. 狀態管理器 ====================
     const state = {
-        activeFilter: 'all',       // 地圖篩選器
+        activeFilter: 'all-spots', // 地圖篩選器
         tableFilter: 'all',        // 時間表專屬篩選器
         searchQuery: '',           // 地圖搜尋字串
         currentView: 'map',        // 'map' 或 'table'
@@ -446,14 +446,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==================== 5. 地圖渲染主程式 ====================
+    // ==================== 5. 地圖渲染主程式 ====================
     function renderMap() {
-        const filteredData = ACTIVITIES.filter(item => {
-            const matchesType = state.activeFilter === 'all' || item.type === state.activeFilter;
-            const query = state.searchQuery.toLowerCase();
-            const matchesSearch = item.name.toLowerCase().includes(query) || 
+        let rawData = [];
+        
+        if (state.activeFilter === 'all-spots') {
+            // 全部景點：顯示所有活動項目
+            rawData = ACTIVITIES;
+        } 
+        else if (state.activeFilter === 'checkin-spots') {
+            // 打卡景點：將 14 個推薦打卡點映射為活動清單格式，讓使用者能在側邊欄一鍵選取與定位！
+            rawData = RECOMMENDED_CHECKPOINTS.map((cp, idx) => ({
+                id: `checkin-${idx}`,
+                type: 'checkin',
+                name: cp.name,
+                locationName: "推薦打卡景點",
+                time: "全天開放",
+                price: "免費參觀",
+                desc: cp.desc,
+                coords: cp.coords
+            }));
+        } 
+        else if (state.activeFilter === 'indoor-activities') {
+            // 館內活動：篩選 free 及 paid 活動
+            rawData = ACTIVITIES.filter(item => item.type === 'free' || item.type === 'paid');
+        } 
+        else if (state.activeFilter === 'offsite-activities') {
+            // 館外活動：篩選 offsite 活動
+            rawData = ACTIVITIES.filter(item => item.type === 'offsite');
+        }
+
+        // 搜尋篩選過濾
+        const query = state.searchQuery.toLowerCase();
+        const filteredData = rawData.filter(item => {
+            const matchesSearch = !query || 
+                                  item.name.toLowerCase().includes(query) || 
                                   item.locationName.toLowerCase().includes(query) || 
                                   item.desc.toLowerCase().includes(query);
-            return matchesType && matchesSearch;
+            return matchesSearch;
         });
 
         elCount.textContent = `共 ${filteredData.length} 個項目`;
@@ -467,46 +497,26 @@ document.addEventListener("DOMContentLoaded", () => {
         const coordOffsetCount = {};
 
         filteredData.forEach(item => {
-            const coordKey = `${item.coords[0].toFixed(5)},${item.coords[1].toFixed(5)}`;
+            const coordKey = item.coords ? `${item.coords[0].toFixed(5)},${item.coords[1].toFixed(5)}` : '0,0';
             if (!coordOffsetCount[coordKey]) coordOffsetCount[coordKey] = 0;
             const offsetIndex = coordOffsetCount[coordKey]++;
 
             const latOffset = offsetIndex * 0.00008;
             const lngOffset = offsetIndex * 0.00008;
-            const adjustedCoords = [item.coords[0] + latOffset, item.coords[1] + lngOffset];
+            const adjustedCoords = item.coords ? [item.coords[0] + latOffset, item.coords[1] + lngOffset] : null;
 
-            const typeLabel = item.type === 'free' ? '館內免費' : (item.type === 'paid' ? '館內付費' : '館外行程');
+            const typeLabel = item.type === 'free' ? '館內免費' : 
+                              (item.type === 'paid' ? '館內付費' : 
+                              (item.type === 'offsite' ? '館外行程' : '推薦打卡'));
             
-            const popupHtml = `
-                <div class="custom-popup">
-                    <span class="popup-badge">${typeLabel}</span>
-                    <h3 class="popup-title">${item.name}</h3>
-                    <div class="popup-info-row"><span class="popup-label">地點：</span>${item.locationName}</div>
-                    <div class="popup-info-row"><span class="popup-label">時間：</span>${item.time}</div>
-                    <div class="popup-info-row"><span class="popup-label">費用：</span>${item.price}</div>
-                    <p class="popup-desc">${item.desc}</p>
-                </div>
-            `;
-
-            // 【暫時停用圖釘】依據使用者需求，清空地圖圖釘，僅保留三個主要範圍框
-            /*
-            const marker = L.marker(adjustedCoords)
-                .bindPopup(popupHtml, { maxWidth: 300 })
-                .addTo(map);
-
-            marker.activityId = item.id;
-            state.markers.push(marker);
-
-            marker.on('click', () => {
-                highlightItem(item.id, false);
-            });
-            */
+            const badgeClass = item.type === 'free' ? 'badge-free' : 
+                               (item.type === 'paid' ? 'badge-paid' : 
+                               (item.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
 
             // 側邊清單項目生成
             const li = document.createElement('li');
             li.className = `activity-item ${state.selectedId === item.id ? 'active' : ''}`;
             li.dataset.id = item.id;
-            const badgeClass = item.type === 'free' ? 'badge-free' : (item.type === 'paid' ? 'badge-paid' : 'badge-offsite');
             
             li.innerHTML = `
                 <span class="item-badge ${badgeClass}">${typeLabel}</span>
@@ -544,10 +554,32 @@ document.addEventListener("DOMContentLoaded", () => {
             state.activeFocusMarker = null;
         }
 
-        const activity = ACTIVITIES.find(item => item.id === id);
+        let activity = ACTIVITIES.find(item => item.id === id);
+        if (!activity && typeof id === 'string' && id.startsWith('checkin-')) {
+            const idx = parseInt(id.replace('checkin-', ''), 10);
+            const cp = RECOMMENDED_CHECKPOINTS[idx];
+            if (cp) {
+                activity = {
+                    id: id,
+                    type: 'checkin',
+                    name: cp.name,
+                    locationName: "推薦打卡景點",
+                    time: "全天開放",
+                    price: "免費參觀",
+                    desc: cp.desc,
+                    coords: cp.coords
+                };
+            }
+        }
+
         if (activity && activity.coords) {
-            const typeLabel = activity.type === 'free' ? '館內免費' : (activity.type === 'paid' ? '館內付費' : '館外行程');
-            const badgeClass = activity.type === 'free' ? 'badge-free' : (activity.type === 'paid' ? 'badge-paid' : 'badge-offsite');
+            const typeLabel = activity.type === 'free' ? '館內免費' : 
+                              (activity.type === 'paid' ? '館內付費' : 
+                              (activity.type === 'offsite' ? '館外行程' : '推薦打卡'));
+
+            const badgeClass = activity.type === 'free' ? 'badge-free' : 
+                               (activity.type === 'paid' ? 'badge-paid' : 
+                               (activity.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
             
             // 構建極致清爽彈出框內容 (遵守零圖示、零 Emoji 規定)
             const popupHtml = `
@@ -818,8 +850,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 block.addEventListener('click', () => {
                     // 1. 切換視圖狀態
                     switchView('map');
-                    // 2. 更新地圖篩選狀態以確保該物件在地圖上顯示 (如果是館外行程切換為館外以防被隱藏)
-                    const mapChip = Array.from(document.querySelectorAll('.chip')).find(c => c.dataset.type === item.type || c.dataset.type === 'all');
+                    // 2. 更新地圖篩選狀態以確保該物件在地圖上顯示
+                    let targetTabType = 'all-spots';
+                    if (item.type === 'free' || item.type === 'paid') {
+                        targetTabType = 'indoor-activities';
+                    } else if (item.type === 'offsite') {
+                        targetTabType = 'offsite-activities';
+                    } else if (item.type === 'checkin') {
+                        targetTabType = 'checkin-spots';
+                    }
+                    const mapChip = Array.from(document.querySelectorAll('.chip')).find(c => c.dataset.type === targetTabType);
                     if(mapChip) mapChip.click();
                     
                     // 3. 執行地圖定位高亮
@@ -877,6 +917,14 @@ document.addEventListener("DOMContentLoaded", () => {
             e.target.classList.add('active');
             state.activeFilter = e.target.dataset.type;
             state.selectedId = null;
+
+            // 切換分頁時移除現有的動態焦點標記
+            if (state.activeFocusMarker) {
+                map.removeLayer(state.activeFocusMarker);
+                state.activeFocusMarker = null;
+            }
+
+            syncLayerCheckboxes(state.activeFilter);
             renderMap();
         });
     });
@@ -933,11 +981,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const selectAllCheckbox = document.getElementById('layer-select-all');
+    const layerSeparator = document.getElementById('layer-separator');
 
-    // 更新全選狀態輔助函式 (若所有子選項都勾選，則全選主盒自動勾選，否則取消勾選)
+    // 更新全選狀態輔助函式 (若所有可見的子選項都勾選，則全選主盒自動勾選，否則取消勾選)
     function updateSelectAllState() {
         if (selectAllCheckbox) {
-            const allChecked = Object.values(layerCheckboxes).every(cb => cb && cb.checked);
+            const visibleCheckboxes = Object.values(layerCheckboxes).filter(cb => cb && cb.parentElement.style.display !== 'none');
+            const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.every(cb => cb.checked);
             selectAllCheckbox.checked = allChecked;
         }
     }
@@ -956,22 +1006,83 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 監聽全選主核取盒 (一鍵勾選/取消全圖層)
+    // 監聽全選主核取盒 (一鍵勾選/取消全可見圖層)
     if (selectAllCheckbox) {
         selectAllCheckbox.addEventListener('change', (e) => {
             const isChecked = e.target.checked;
             Object.keys(layerCheckboxes).forEach(key => {
                 const checkbox = layerCheckboxes[key];
-                if (checkbox && checkbox.checked !== isChecked) {
-                    checkbox.checked = isChecked;
-                    if (isChecked) {
-                        mapGroups[key].addTo(map);
-                    } else {
-                        map.removeLayer(mapGroups[key]);
+                // 僅操作當前顯示的可見核取盒，避免點擊全選時影響到隱藏的圖層！
+                if (checkbox && checkbox.parentElement.style.display !== 'none') {
+                    if (checkbox.checked !== isChecked) {
+                        checkbox.checked = isChecked;
+                        if (isChecked) {
+                            mapGroups[key].addTo(map);
+                        } else {
+                            map.removeLayer(mapGroups[key]);
+                        }
                     }
                 }
             });
         });
+    }
+
+    // 依據左側篩選 Tab 同步右側核取盒的可見度與預設選取狀態
+    function syncLayerCheckboxes(activeFilter) {
+        // 重置所有圖層的可見度 (隱藏所有)
+        Object.keys(layerCheckboxes).forEach(key => {
+            const checkbox = layerCheckboxes[key];
+            if (checkbox) {
+                // 預設將 checkbox 包裝 label 顯示出來
+                checkbox.parentElement.style.display = 'flex';
+                // 取消勾選並從地圖移除
+                checkbox.checked = false;
+                map.removeLayer(mapGroups[key]);
+            }
+        });
+        if (selectAllCheckbox) {
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.parentElement.style.display = 'flex';
+        }
+        if (layerSeparator) layerSeparator.style.display = 'block';
+
+        if (activeFilter === 'all-spots') {
+            // == 全部景點 ==
+            // 保持全部選項可見，不強制預設勾選任何圖層，讓使用者自己選
+        } 
+        else if (activeFilter === 'checkin-spots') {
+            // == 打卡景點 ==
+            // 只保留「全選/取消」、「推薦打卡」核取盒，其他全部隱藏！
+            Object.keys(layerCheckboxes).forEach(key => {
+                if (key !== 'checkin') {
+                    layerCheckboxes[key].parentElement.style.display = 'none';
+                }
+            });
+            // 自動勾選「推薦打卡」圖層並在地圖上呈現
+            layerCheckboxes.checkin.checked = true;
+            mapGroups.checkin.addTo(map);
+            updateSelectAllState(); // 更新全選勾選狀態
+        } 
+        else if (activeFilter === 'indoor-activities') {
+            // == 館內活動 ==
+            // 隱藏「推薦打卡」核取盒，顯示「住宿、餐廳、廁所、橋樑、景點、碼頭」
+            layerCheckboxes.checkin.parentElement.style.display = 'none';
+            // 自動勾選常用的景點與餐廳圖層，方便館內活動定位
+            layerCheckboxes.attraction.checked = true;
+            layerCheckboxes.restaurant.checked = true;
+            mapGroups.attraction.addTo(map);
+            mapGroups.restaurant.addTo(map);
+            updateSelectAllState();
+        } 
+        else if (activeFilter === 'offsite-activities') {
+            // == 館外活動 ==
+            // 館外行程不對應渡假村內圖層，全部選項與分隔線隱藏！
+            Object.keys(layerCheckboxes).forEach(key => {
+                layerCheckboxes[key].parentElement.style.display = 'none';
+            });
+            if (selectAllCheckbox) selectAllCheckbox.parentElement.style.display = 'none';
+            if (layerSeparator) layerSeparator.style.display = 'none';
+        }
     }
 
     // ==================== 7.5 推薦打卡景點任務活動邏輯 ====================
@@ -1049,6 +1160,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ==================== 8. 初始化執行觸發 ====================
     
+    // 首次載入時依據預設分頁同步右側核取盒狀態
+    syncLayerCheckboxes(state.activeFilter);
+
     // 初始化渲染地圖介面
     renderMap();
     

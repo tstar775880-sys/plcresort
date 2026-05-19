@@ -281,6 +281,7 @@ body, html {
 .badge-free { background: rgba(46, 184, 114, 0.15); color: #5cd999; border: 1px solid rgba(46, 184, 114, 0.3); }
 .badge-paid { background: rgba(207, 160, 86, 0.15); color: var(--accent-gold); border: 1px solid rgba(207, 160, 86, 0.3); }
 .badge-offsite { background: rgba(52, 152, 219, 0.15); color: #74b9ff; border: 1px solid rgba(52, 152, 219, 0.3); }
+.badge-checkin { background: rgba(253, 121, 168, 0.15); color: #fd79a8; border: 1px solid rgba(253, 121, 168, 0.3); }
 
 .item-name {
     font-family: var(--font-serif);
