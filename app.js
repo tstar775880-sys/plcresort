@@ -39,12 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 當地圖上的 Popup 被開啟時，自動綁定精緻輪播圖 (Carousel) 互動功能與左右切換按鈕！
     map.on('popupopen', (e) => {
-        const carousel = document.getElementById('popup-carousel-container');
+        const popupContainer = e.popup.getElement();
+        if (!popupContainer) return;
+        
+        const carousel = popupContainer.querySelector('.popup-carousel');
         if (!carousel) return;
         
-        const slidesInner = document.getElementById('carousel-slides-inner');
-        const prevBtn = document.getElementById('carousel-prev');
-        const nextBtn = document.getElementById('carousel-next');
+        const slidesInner = popupContainer.querySelector('.carousel-slides');
+        const prevBtn = popupContainer.querySelector('.prev-btn');
+        const nextBtn = popupContainer.querySelector('.next-btn');
         const dots = carousel.querySelectorAll('.carousel-dot');
         
         let currentIndex = parseInt(carousel.dataset.initialIndex || '0', 10);
@@ -61,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
             
             // 滑動動畫
-            slidesInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+            if (slidesInner) slidesInner.style.transform = `translateX(-${currentIndex * 100}%)`;
             
             // 更新 Dots 狀態
             dots.forEach((dot, idx) => {
@@ -93,22 +96,25 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         
-        // 綁定按鈕點擊監聽
+        // 綁定按鈕點擊監聽 (阻止事件冒泡以避免 Leaflet 誤判)
         if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
+            prevBtn.addEventListener('click', (ev) => {
+                ev.stopPropagation();
                 updateCarousel(currentIndex - 1);
             });
         }
         
         if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
+            nextBtn.addEventListener('click', (ev) => {
+                ev.stopPropagation();
                 updateCarousel(currentIndex + 1);
             });
         }
         
-        // 綁定 Dots 點擊監聽
+        // 綁定 Dots 點擊監聽 (阻止事件冒泡以避免 Leaflet 誤判)
         dots.forEach(dot => {
             dot.addEventListener('click', (ev) => {
+                ev.stopPropagation();
                 const targetIdx = parseInt(ev.target.dataset.index, 10);
                 updateCarousel(targetIdx);
             });
