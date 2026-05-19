@@ -867,26 +867,42 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
             }
 
-            // 建立動態亮金色呼吸圈標記
-            state.activeFocusMarker = L.circleMarker(activity.coords, {
-                radius: 12,
-                fillColor: '#fdcb6e',   // 亮麗金色
-                color: '#ffffff',       // 耀眼白框
-                weight: 3,
-                opacity: 1,
-                fillOpacity: 0.9,
-                className: 'pulsing-focus-marker' // 套用 CSS 動畫
-            }).addTo(map);
-
-            state.activeFocusMarker.bindPopup(popupHtml, { maxWidth: 300, className: 'custom-popup-wrapper' });
-
-            if (shouldPanMap) {
-                map.setView(activity.coords, 18, { animate: true, duration: 0.6 });
-                setTimeout(() => { 
-                    if (state.activeFocusMarker) state.activeFocusMarker.openPopup(); 
-                }, 500);
+            if (activity.type === 'offsite') {
+                // 館外行程：不建立黃色定位圈，直接在接待大廳框框上彈出氣泡！
+                if (typeof buildingLobbyPoly !== 'undefined' && buildingLobbyPoly) {
+                    buildingLobbyPoly.bindPopup(popupHtml, { maxWidth: 300, className: 'custom-popup-wrapper' });
+                    
+                    if (shouldPanMap) {
+                        map.setView(activity.coords, 18, { animate: true, duration: 0.6 });
+                        setTimeout(() => { 
+                            buildingLobbyPoly.openPopup(); 
+                        }, 500);
+                    } else {
+                        buildingLobbyPoly.openPopup();
+                    }
+                }
             } else {
-                state.activeFocusMarker.openPopup();
+                // 館內活動或打卡：維持精緻的黃金呼吸定位圈
+                state.activeFocusMarker = L.circleMarker(activity.coords, {
+                    radius: 12,
+                    fillColor: '#fdcb6e',   // 亮麗金色
+                    color: '#ffffff',       // 耀眼白框
+                    weight: 3,
+                    opacity: 1,
+                    fillOpacity: 0.9,
+                    className: 'pulsing-focus-marker' // 套用 CSS 動畫
+                }).addTo(map);
+
+                state.activeFocusMarker.bindPopup(popupHtml, { maxWidth: 300, className: 'custom-popup-wrapper' });
+
+                if (shouldPanMap) {
+                    map.setView(activity.coords, 18, { animate: true, duration: 0.6 });
+                    setTimeout(() => { 
+                        if (state.activeFocusMarker) state.activeFocusMarker.openPopup(); 
+                    }, 500);
+                } else {
+                    state.activeFocusMarker.openPopup();
+                }
             }
 
             // 手機版優化：點選活動列表後，自動收合底部抽屜以利使用者觀看地圖！
