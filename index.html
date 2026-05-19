@@ -95,19 +95,9 @@
             </div>
             
             <footer class="sidebar-footer">
-                <div class="official-pdf-links">
-                    <h4 class="pdf-links-title">官方最新下載資源</h4>
-                    <ul class="pdf-list">
-                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/2026Nian%20Du%20Guan%20Wai%20Ban%20Ri%20You%20~Ri%20You%20Xing%20Cheng%20.pdf" target="_blank">2026年度館外半日/一日遊行程</a></li>
-                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2025/2025Nian%20Du%20%20ZEN%20SPALiao%20Cheng%20~Lan%20Biao%20.pdf" target="_blank">2025年度 ZEN SPA 完整療程</a></li>
-                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/Feng%20Wei%20Cai%20Dan%20_Guan%20Wang%20Yong%20.pdf" target="_blank">風味餐廳主廚推薦餐飲菜單</a></li>
-                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/Shen%20Nong%20Sheng%20Huo%20-Can%20Yin%20Cai%20Dan%20.pdf" target="_blank">PAARK水岸神農生活餐飲菜單</a></li>
-                        <li><a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/2026Zong%20He%20Ban%20Shou%20Li%20Cu%20Xiao%20Ding%20Gou%20Dan%20_S.pdf" target="_blank">伴手禮綜合促銷訂購指南</a></li>
-                    </ul>
-                </div>
+                <button id="btn-official-downloads" class="downloads-trigger-btn">官方下載專區</button>
                 <div class="footer-info">
-                    <p>備註：此版本已精確導入官方2026半日遊與SPA療程數據。</p>
-                    <p>地圖已透過 Google 座標錨定並支持手繪圖層疊加。</p>
+                    <p>備註：此版本已精確導入官方2026數據。支援 Google 座標與手繪地圖錨定。</p>
                 </div>
             </footer>
         </aside>
@@ -218,6 +208,54 @@
             <button class="modal-close-btn" aria-label="關閉視窗">&times;</button>
             <div id="modal-body-content">
                 <!-- 動態由 JS 注入詳細內容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 官方下載專區彈出視窗 (Modal) -->
+    <div id="downloads-modal" class="modal-backdrop view-hidden">
+        <div class="modal-content glass-panel">
+            <button class="modal-close-btn" id="close-downloads-modal" aria-label="關閉視窗">&times;</button>
+            <div class="modal-header">
+                <span class="modal-badge badge-paid">DOWNLOADS</span>
+                <h2 class="modal-title">官方最新下載資源</h2>
+            </div>
+            <div class="modal-body-content">
+                <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 16px; line-height: 1.4;">
+                    點選下方連結即可下載或線上預覽花蓮理想大地渡假飯店官方發佈之最新行程與餐飲資源。
+                </p>
+                <ul class="downloads-modal-list">
+                    <li>
+                        <a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/2026Nian%20Du%20Guan%20Wai%20Ban%20Ri%20You%20~Ri%20You%20Xing%20Cheng%20.pdf" target="_blank" class="download-link-item">
+                            <span class="download-link-title">2026年度館外半日/一日遊行程</span>
+                            <span class="download-action-label">立即下載 (PDF)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2025/2025Nian%20Du%20%20ZEN%20SPALiao%20Cheng%20~Lan%20Biao%20.pdf" target="_blank" class="download-link-item">
+                            <span class="download-link-title">2025年度 ZEN SPA 完整療程</span>
+                            <span class="download-action-label">立即下載 (PDF)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/Feng%20Wei%20Cai%20Dan%20_Guan%20Wang%20Yong%20.pdf" target="_blank" class="download-link-item">
+                            <span class="download-link-title">風味餐廳主廚推薦餐飲菜單</span>
+                            <span class="download-action-label">立即下載 (PDF)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/Shen%20Nong%20Sheng%20Huo%20-Can%20Yin%20Cai%20Dan%20.pdf" target="_blank" class="download-link-item">
+                            <span class="download-link-title">PAARK水岸神農生活餐飲菜單</span>
+                            <span class="download-action-label">立即下載 (PDF)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.plcresort.com.tw/Xia%20Zai%20Zhuan%20Qu/2026/2026Zong%20He%20Ban%20Shou%20Li%20Cu%20Xiao%20Ding%20Gou%20Dan%20_S.pdf" target="_blank" class="download-link-item">
+                            <span class="download-link-title">伴手禮綜合促銷訂購指南</span>
+                            <span class="download-action-label">立即下載 (PDF)</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

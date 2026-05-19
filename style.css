@@ -366,17 +366,92 @@ body, html {
     width: fit-content;
 }
 
-.pdf-list li a:hover {
-    color: var(--accent-gold-hover);
-    border-bottom: 1px solid var(--accent-gold);
-    transform: translateX(2px);
-}
-
 .footer-info p {
     font-size: 10.5px;
     color: rgba(255, 255, 255, 0.35);
     line-height: 1.4;
     margin-bottom: 3px;
+}
+
+/* --- 官方下載專區按鈕樣式 --- */
+.downloads-trigger-btn {
+    width: 100%;
+    padding: 10px 16px;
+    background: transparent;
+    border: 1px solid var(--accent-gold);
+    border-radius: 4px;
+    color: var(--accent-gold);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+    font-family: var(--font-sans);
+    letter-spacing: 1px;
+}
+
+.downloads-trigger-btn:hover {
+    background: var(--accent-gold);
+    color: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(207, 160, 86, 0.2);
+}
+
+/* --- 下載專區 Modal 列表樣式 --- */
+.downloads-modal-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.download-link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.download-link-item:hover {
+    background: rgba(207, 160, 86, 0.05);
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+}
+
+.download-link-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    transition: color 0.2s ease;
+    text-align: left;
+}
+
+.download-link-item:hover .download-link-title {
+    color: var(--accent-gold);
+}
+
+.download-action-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    background: rgba(207, 160, 86, 0.1);
+    padding: 4px 8px;
+    border-radius: 3px;
+    border: 1px solid rgba(207, 160, 86, 0.2);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.download-link-item:hover .download-action-label {
+    color: var(--primary-dark);
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
 }
 
 /* ==================== 視圖一：地圖與 Leaflet 覆蓋 ==================== */

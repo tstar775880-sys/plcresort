@@ -780,6 +780,41 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ==================== 官方下載專區 Modal 控制邏輯 ====================
+    const btnOfficialDownloads = document.getElementById('btn-official-downloads');
+    const downloadsModal = document.getElementById('downloads-modal');
+    const btnCloseDownloadsModal = document.getElementById('close-downloads-modal');
+
+    function showDownloadsModal() {
+        if (!downloadsModal) return;
+        downloadsModal.classList.remove('view-hidden');
+        setTimeout(() => {
+            downloadsModal.classList.add('active');
+        }, 10);
+    }
+
+    function hideDownloadsModal() {
+        if (!downloadsModal) return;
+        downloadsModal.classList.remove('active');
+        setTimeout(() => {
+            downloadsModal.classList.add('view-hidden');
+        }, 300);
+    }
+
+    if (btnOfficialDownloads) {
+        btnOfficialDownloads.addEventListener('click', showDownloadsModal);
+    }
+    if (btnCloseDownloadsModal) {
+        btnCloseDownloadsModal.addEventListener('click', hideDownloadsModal);
+    }
+    if (downloadsModal) {
+        downloadsModal.addEventListener('click', (e) => {
+            if (e.target === downloadsModal) {
+                hideDownloadsModal();
+            }
+        });
+    }
+
     // 動態繪製活動軌道與甘特方塊
     function renderTimetable() {
         // 篩選出要呈現的活動資料
