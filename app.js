@@ -572,11 +572,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     fillOpacity: 0.35
                 });
                 buildingLobbyPoly.unbindTooltip();
-                buildingLobbyPoly.bindTooltip("接待大廳 (共5個項目)", { 
-                    permanent: true, 
-                    direction: 'center', 
-                    className: 'custom-tooltip-permanent' 
-                }).openTooltip();
             }
         }
 
@@ -1248,6 +1243,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.target.classList.add('active');
             state.activeFilter = e.target.dataset.type;
             state.selectedId = null;
+            map.closePopup();
 
             // 切換分頁時移除現有的動態焦點標記
             if (state.activeFocusMarker) {
@@ -1278,6 +1274,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.target.classList.add('active');
             state.indoorSubFilter = e.target.dataset.subType;
             state.selectedId = null;
+            map.closePopup();
 
             // 移除現有的動態焦點標記
             if (state.activeFocusMarker) {
