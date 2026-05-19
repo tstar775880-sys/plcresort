@@ -685,8 +685,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // 為每個有活動的地點繪製一個精緻圓標記
+            // 為每個有活動的地點繪製一個精緻圓標記 (湖光山舍及其附屬空間皆直接綁定在建築框框上，排除重疊圓點)
             Object.values(locationsGroup).forEach(loc => {
+                if (
+                    loc.name === '湖光山舍' || 
+                    loc.name === '湖畔小憩' || 
+                    loc.name === '休閒中心' || 
+                    loc.name === '娛樂室'
+                ) {
+                    return;
+                }
+                
                 const hasFree = loc.activities.some(act => act.type === 'free');
                 const hasPaid = loc.activities.some(act => act.type === 'paid');
                 
@@ -965,6 +974,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
             }
 
+            const isLakeside = activity.coords && 
+                (Math.abs(activity.coords[0] - 23.86395) < 0.0002 && Math.abs(activity.coords[1] - 121.52735) < 0.0002);
+
             if (activity.type === 'offsite') {
                 // 館外行程：不建立黃色定位圈，直接在接待大廳框框上彈出氣泡！
                 if (typeof buildingLobbyPoly !== 'undefined' && buildingLobbyPoly) {
@@ -977,6 +989,20 @@ document.addEventListener("DOMContentLoaded", () => {
                         }, 500);
                     } else {
                         buildingLobbyPoly.openPopup();
+                    }
+                }
+            } else if (isLakeside) {
+                // 湖光山舍相關活動：不建立黃色定位圈，直接在「湖光山舍」建築框框上彈出氣泡！
+                if (typeof lakesideRestPoly !== 'undefined' && lakesideRestPoly) {
+                    lakesideRestPoly.bindPopup(popupHtml, { maxWidth: 300, className: 'custom-popup-wrapper' });
+                    
+                    if (shouldPanMap) {
+                        map.setView(RESORT_LOCATIONS["湖光山舍"], 18, { animate: true, duration: 0.6 });
+                        setTimeout(() => { 
+                            lakesideRestPoly.openPopup(); 
+                        }, 500);
+                    } else {
+                        lakesideRestPoly.openPopup();
                     }
                 }
             } else {
