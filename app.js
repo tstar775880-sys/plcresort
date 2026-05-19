@@ -759,6 +759,109 @@ document.addEventListener("DOMContentLoaded", () => {
 
             elList.appendChild(li);
         });
+
+        // ==================== 動態高亮有活動的建築與點 ====================
+        if (state.activeFilter === 'indoor-activities') {
+            const hasLakeside = filteredData.some(act => act.coords && Math.abs(act.coords[0] - 23.86395) < 0.0002 && Math.abs(act.coords[1] - 121.52735) < 0.0002);
+            const hasFengwei = filteredData.some(act => act.locationName === '風味餐廳');
+            const hasHaoyong = filteredData.some(act => act.locationName === '豪雍精品');
+            const hasStarry = filteredData.some(act => act.locationName === '星空電影');
+            const hasArchery = filteredData.some(act => act.locationName === '射箭場');
+            const hasSeville = filteredData.some(act => act.locationName === '賽維亞草原');
+            const hasYoga = filteredData.some(act => act.locationName === '瑜珈平台');
+            const hasPeacock = filteredData.some(act => act.locationName === '孔雀島');
+            const hasCypress = filteredData.some(act => act.locationName === '水中落羽松');
+            const hasFishing = filteredData.some(act => act.locationName === '釣魚平台' || (act.coords && Math.abs(act.coords[0] - 23.86485) < 0.0002));
+            const hasFeeding = filteredData.some(act => act.locationName === '親子餵魚區');
+            const hasService = filteredData.some(act => act.locationName === '豐之谷服務中心');
+            const hasLira = filteredData.some(act => act.locationName === '里拉餐廳');
+            
+            // 定義高亮/暗淡樣式套用輔助函式
+            const applyPolyStyle = (poly, isActive, defaultStyle) => {
+                if (isActive) {
+                    poly.setStyle({
+                        color: defaultStyle.color,
+                        weight: defaultStyle.weight,
+                        fillColor: defaultStyle.fillColor,
+                        fillOpacity: defaultStyle.fillOpacity,
+                        opacity: 1
+                    });
+                } else {
+                    poly.setStyle({
+                        color: defaultStyle.color,
+                        weight: 0.8,
+                        fillOpacity: 0.02,
+                        opacity: 0.15
+                    });
+                }
+            };
+
+            const applyMarkerStyle = (marker, isActive) => {
+                if (isActive) {
+                    marker.setStyle({
+                        fillOpacity: 0.95,
+                        opacity: 1,
+                        radius: 8
+                    });
+                } else {
+                    marker.setStyle({
+                        fillOpacity: 0.05,
+                        opacity: 0.15,
+                        radius: 4
+                    });
+                }
+            };
+
+            // 套用多邊形樣式
+            if (typeof lakesideRestPoly !== 'undefined') applyPolyStyle(lakesideRestPoly, hasLakeside, { color: '#10ac84', weight: 2, fillColor: '#1dd1a1', fillOpacity: 0.15 });
+            if (typeof buildingFengweiPoly !== 'undefined') applyPolyStyle(buildingFengweiPoly, hasFengwei, { color: '#e17055', weight: 2, fillColor: '#e17055', fillOpacity: 0.2 });
+            if (typeof buildingHaoyongPoly !== 'undefined') applyPolyStyle(buildingHaoyongPoly, hasHaoyong, { color: '#d63031', weight: 2, fillColor: '#d63031', fillOpacity: 0.2 });
+            if (typeof starryMoviePoly !== 'undefined') applyPolyStyle(starryMoviePoly, hasStarry, { color: '#6c5ce7', weight: 2, fillColor: '#6c5ce7', fillOpacity: 0.15 });
+            if (typeof areaArcheryPoly !== 'undefined') applyPolyStyle(areaArcheryPoly, hasArchery, { color: '#fdcb6e', weight: 2, fillColor: '#fdcb6e', fillOpacity: 0.25 });
+            if (typeof fishingPlatformPoly !== 'undefined') applyPolyStyle(fishingPlatformPoly, hasFishing, { color: '#d35400', weight: 2, fillColor: '#e67e22', fillOpacity: 0.22 });
+            if (typeof fishFeedingPoly !== 'undefined') applyPolyStyle(fishFeedingPoly, hasFeeding, { color: '#ff7675', weight: 2, fillColor: '#ff7675', fillOpacity: 0.22 });
+            if (typeof serviceCenterPoly !== 'undefined') applyPolyStyle(serviceCenterPoly, hasService, { color: '#d35400', weight: 2, fillColor: '#e67e22', fillOpacity: 0.26 });
+            if (typeof liraRestaurantPoly !== 'undefined') applyPolyStyle(liraRestaurantPoly, hasLira, { color: '#d35400', weight: 2, fillColor: '#e67e22', fillOpacity: 0.25 });
+
+            // 套用圓點標記樣式
+            if (typeof sevilleGrasslandMarker !== 'undefined') applyMarkerStyle(sevilleGrasslandMarker, hasSeville);
+            if (typeof yogaPlatformMarker !== 'undefined') applyMarkerStyle(yogaPlatformMarker, hasYoga);
+            if (typeof peacockIslandMarker !== 'undefined') applyMarkerStyle(peacockIslandMarker, hasPeacock);
+            if (typeof cypressMarker !== 'undefined') applyMarkerStyle(cypressMarker, hasCypress);
+        } else {
+            // 非館內活動期間（例如：全部景點、打卡景點、館外活動），一律恢復地圖各建築與圓點之最璀璨典雅預設樣式
+            const resetPoly = (poly, defaultStyle) => {
+                if (poly) poly.setStyle({
+                    color: defaultStyle.color,
+                    weight: defaultStyle.weight,
+                    fillColor: defaultStyle.fillColor,
+                    fillOpacity: defaultStyle.fillOpacity,
+                    opacity: 1
+                });
+            };
+            const resetMarker = (marker, radius) => {
+                if (marker) marker.setStyle({
+                    fillOpacity: 0.95,
+                    opacity: 1,
+                    radius: radius || 8
+                });
+            };
+
+            if (typeof lakesideRestPoly !== 'undefined') resetPoly(lakesideRestPoly, { color: '#10ac84', weight: 2, fillColor: '#1dd1a1', fillOpacity: 0.15 });
+            if (typeof buildingFengweiPoly !== 'undefined') resetPoly(buildingFengweiPoly, { color: '#e17055', weight: 2, fillColor: '#e17055', fillOpacity: 0.2 });
+            if (typeof buildingHaoyongPoly !== 'undefined') resetPoly(buildingHaoyongPoly, { color: '#d63031', weight: 2, fillColor: '#d63031', fillOpacity: 0.2 });
+            if (typeof starryMoviePoly !== 'undefined') resetPoly(starryMoviePoly, { color: '#6c5ce7', weight: 2, fillColor: '#6c5ce7', fillOpacity: 0.15 });
+            if (typeof areaArcheryPoly !== 'undefined') resetPoly(areaArcheryPoly, { color: '#fdcb6e', weight: 2, fillColor: '#fdcb6e', fillOpacity: 0.25 });
+            if (typeof fishingPlatformPoly !== 'undefined') resetPoly(fishingPlatformPoly, { color: '#d35400', weight: 2, fillColor: '#e67e22', fillOpacity: 0.22 });
+            if (typeof fishFeedingPoly !== 'undefined') resetPoly(fishFeedingPoly, { color: '#ff7675', weight: 2, fillColor: '#ff7675', fillOpacity: 0.22 });
+            if (typeof serviceCenterPoly !== 'undefined') resetPoly(serviceCenterPoly, { color: '#d35400', weight: 2, fillColor: '#e67e22', fillOpacity: 0.26 });
+            if (typeof liraRestaurantPoly !== 'undefined') resetPoly(liraRestaurantPoly, { color: '#d35400', weight: 2, fillColor: '#e67e22', fillOpacity: 0.25 });
+
+            if (typeof sevilleGrasslandMarker !== 'undefined') resetMarker(sevilleGrasslandMarker, 8);
+            if (typeof yogaPlatformMarker !== 'undefined') resetMarker(yogaPlatformMarker, 7);
+            if (typeof peacockIslandMarker !== 'undefined') resetMarker(peacockIslandMarker, 7);
+            if (typeof cypressMarker !== 'undefined') resetMarker(cypressMarker, 7);
+        }
     }
 
     // 依據座標取得目前篩選結果中在此位置的所有活動與打卡景點
@@ -1411,6 +1514,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 state.activeFocusMarker = null;
             }
 
+            // 重新點選子分類時，自動重置並啟動「景點、餐廳、碼頭」等核取盒圖層，確保對應的點與建築框正常亮起！
+            syncLayerCheckboxes(state.activeFilter);
             renderMap();
         });
     });
