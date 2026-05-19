@@ -1573,3 +1573,57 @@ body, html {
     transition: all 0.2s ease-out;
 }
 
+/* --- 住宿建築數字圓點標記 (融入背景，完全無互動，宛如繪製於背景地圖上) --- */
+.building-number-icon {
+    background: rgba(127, 140, 141, 0.45) !important; /* 半透明莫蘭迪灰，極致融入背景 */
+    border: 1px solid rgba(255, 255, 255, 0.25) !important; /* 輕薄半透明白邊框 */
+    color: rgba(255, 255, 255, 0.7) !important; /* 柔和半透明數字 */
+    border-radius: 50% !important; /* 完美圓形 */
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+    font-family: var(--font-sans) !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    user-select: none !important;
+    pointer-events: none !important; /* 完全穿透鼠標事件 */
+}
+
+/* --- 館內活動子篩選按鈕樣式 --- */
+.sub-filter-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+.sub-chip {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-gray);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+}
+
+.sub-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.sub-chip.active {
+    background: rgba(207, 160, 86, 0.12);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+

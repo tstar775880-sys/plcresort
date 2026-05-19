@@ -255,15 +255,37 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     accommodationBuildings.forEach(building => {
+        // 渲染融入背景的灰色軟調邊框與半透明填充 (完全不互動)
         L.polygon(building.coords, {
-            color: '#e17055',       // 質感橘紅色邊框
-            weight: 1.8,
-            fillColor: '#fab1a0',   // 柔和淡橘填充
-            fillOpacity: 0.22,
-            lineCap: 'round',
-            lineJoin: 'round'
-        }).addTo(mapGroups.accommodation)
-          .bindTooltip(building.name, { sticky: true, className: 'custom-tooltip' });
+            color: 'rgba(255, 255, 255, 0.12)',     // 極其輕微的淡白/淺灰邊框
+            weight: 1.2,
+            fillColor: 'rgba(255, 255, 255, 0.03)',  // 極限融入背景的透明填充
+            fillOpacity: 1,
+            interactive: false
+        }).addTo(map); // 直接加入 map 成為背景
+
+        // 計算中心點以擺放建築編號
+        let latSum = 0, lngSum = 0;
+        building.coords.forEach(pt => {
+            latSum += pt[0];
+            lngSum += pt[1];
+        });
+        const centerCoords = [latSum / building.coords.length, lngSum / building.coords.length];
+
+        // 提取棟數數字 (例如 "19棟" 提取出 "19")
+        const match = building.name.match(/\d+/);
+        if (match) {
+            const labelNum = match[0];
+            L.marker(centerCoords, {
+                icon: L.divIcon({
+                    className: 'building-number-icon',
+                    html: labelNum,
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11]
+                }),
+                interactive: false
+            }).addTo(map);
+        }
     });
 
     // 12. 理想大地停車場區 (高質感簡潔 P 字圓形標記，降低地圖視覺干擾)
@@ -418,6 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==================== 2. 狀態管理器 ====================
     const state = {
         activeFilter: 'indoor-activities', // 地圖篩選器
+        indoorSubFilter: 'all',    // 館內活動子篩選 ('all', 'free', 'paid')
         tableFilter: 'all',        // 時間表專屬篩選器
         searchQuery: '',           // 地圖搜尋字串
         currentView: 'map',        // 'map' 或 'table'
@@ -498,6 +521,12 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (state.activeFilter === 'indoor-activities') {
             // 館內活動：篩選 free 及 paid 活動
             rawData = ACTIVITIES.filter(item => item.type === 'free' || item.type === 'paid');
+            // 進一步依據免費/付費子篩選
+            if (state.indoorSubFilter === 'free') {
+                rawData = rawData.filter(item => item.type === 'free');
+            } else if (state.indoorSubFilter === 'paid') {
+                rawData = rawData.filter(item => item.type === 'paid');
+            }
         } 
         else if (state.activeFilter === 'offsite-activities') {
             // 館外活動：篩選 offsite 活動
@@ -1137,15 +1166,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // 當切換到「館內活動 (indoor-activities)」時才顯示打卡任務，其餘隱藏！
             const questCard = document.getElementById('checkin-quest-card');
-            if (questCard) {
-                if (state.activeFilter === 'indoor-activities') {
-                    questCard.style.display = 'block';
-                } else {
-                    questCard.style.display = 'none';
-                }
+            const subFilters = document.getElementById('indoor-sub-filters');
+            if (state.activeFilter === 'indoor-activities') {
+                if (questCard) questCard.style.display = 'block';
+                if (subFilters) subFilters.style.display = 'flex';
+            } else {
+                if (questCard) questCard.style.display = 'none';
+                if (subFilters) subFilters.style.display = 'none';
             }
 
             syncLayerCheckboxes(state.activeFilter);
+            renderMap();
+        });
+    });
+
+    // 館內活動子篩選 Sub-Chip 監聽
+    document.querySelectorAll('.sub-chip').forEach(subChip => {
+        subChip.addEventListener('click', (e) => {
+            document.querySelectorAll('.sub-chip').forEach(c => c.classList.remove('active'));
+            e.target.classList.add('active');
+            state.indoorSubFilter = e.target.dataset.subType;
+            state.selectedId = null;
+
+            // 移除現有的動態焦點標記
+            if (state.activeFocusMarker) {
+                map.removeLayer(state.activeFocusMarker);
+                state.activeFocusMarker = null;
+            }
+
             renderMap();
         });
     });
@@ -1326,7 +1374,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 地圖圖層分類篩選監聽器 (即時開關 LayerGroup)
     const layerCheckboxes = {
-        accommodation: document.getElementById('layer-accommodation'),
         restaurant: document.getElementById('layer-restaurant'),
         toilet: document.getElementById('layer-toilet'),
         bridge: document.getElementById('layer-bridge'),
@@ -1420,13 +1467,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
         else if (activeFilter === 'indoor-activities') {
             // == 館內活動 ==
-            // 隱藏「推薦打卡」核取盒，顯示「住宿、餐廳、廁所、橋樑、景點、碼頭」
+            // 隱藏「推薦打卡」核取盒，顯示「餐廳、廁所、橋樑、景點、碼頭」
             layerCheckboxes.checkin.parentElement.style.display = 'none';
-            // 自動勾選常用的景點與餐廳圖層，方便館內活動定位
-            layerCheckboxes.attraction.checked = true;
-            layerCheckboxes.restaurant.checked = true;
-            mapGroups.attraction.addTo(map);
-            mapGroups.restaurant.addTo(map);
+            // 預設全部不勾選，維持地圖極致清爽與融入背景
             updateSelectAllState();
         } 
         else if (activeFilter === 'offsite-activities') {
