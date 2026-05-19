@@ -116,6 +116,32 @@ body, html {
     transition: all 0.4s ease;
 }
 
+.mobile-drag-handle {
+    display: none; /* 預設在桌面版隱藏 */
+    width: 100%;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+}
+
+.drag-bar {
+    width: 42px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.sidebar-scrollable-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
 .sidebar-header {
     padding: 45px 32px 20px 32px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -208,14 +234,11 @@ body, html {
 }
 
 .list-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    width: 100%;
 }
 
 .list-header {
-    padding: 20px 32px 12px 32px;
+    padding: 16px 0 12px 0;
     font-size: 12px;
     color: var(--text-gray);
     letter-spacing: 1px;
@@ -797,11 +820,98 @@ body, html {
 .time-block-short .block-title { font-size: 11px; }
 
 /* ==================== 響應式 RWD 調整 ==================== */
+/* ==================== 響應式 RWD 調整 ==================== */
 @media (max-width: 900px) {
-    #app-container { flex-direction: column-reverse; }
-    #sidebar { width: 100%; height: 45%; border-right: none; border-top: 1px solid var(--border-glass); }
-    #map-wrapper { height: 55%; }
-    .view-toggle-container { top: 10px; right: 10px; }
+    #app-container {
+        flex-direction: column; /* 正常垂直堆疊，地圖在上方，側邊欄在下方 */
+    }
+    
+    #map-wrapper {
+        height: 100vh !important; /* 地圖填滿整個螢幕 */
+        width: 100vw !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+    
+    #sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 72px; /* 摺疊時的精簡高度，只顯示把手和標題 */
+        border-right: none;
+        border-top: 1px solid var(--border-glass);
+        border-radius: 16px 16px 0 0; /* 優雅的圓角 */
+        z-index: 2000; /* 高於地圖 */
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1); /* 流暢彈性動畫 */
+    }
+    
+    /* 展開狀態的底部抽屜面版 */
+    #sidebar.expanded {
+        height: 75vh; /* 展開至螢幕的 75% 高度 */
+    }
+    
+    .mobile-drag-handle {
+        display: flex; /* 顯示把手 */
+    }
+    
+    .sidebar-header {
+        padding: 10px 24px 12px 24px;
+        text-align: center;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .resort-prefix {
+        font-size: 9px;
+        letter-spacing: 2px;
+        margin-bottom: 2px;
+    }
+    
+    .resort-title {
+        font-size: 18px;
+        display: inline-block;
+    }
+    
+    /* 在標題後方加上優雅的展開/收合提示小箭頭 */
+    .resort-title::after {
+        content: ' ▴';
+        font-size: 12px;
+        color: var(--accent-gold);
+        transition: transform 0.3s ease;
+    }
+    
+    #sidebar.expanded .resort-title::after {
+        content: ' ▾';
+    }
+    
+    .resort-subtitle {
+        font-size: 11px;
+        margin-top: 2px;
+    }
+    
+    .sidebar-scrollable-body {
+        padding-bottom: 40px; /* 確保滑動到底部時不被遮擋 */
+    }
+    
+    /* 右上角的視圖切換與地圖圖層控制位置微調 */
+    .view-toggle-container {
+        top: 15px;
+        right: 15px;
+        z-index: 1500;
+    }
+    
+    #map-layer-control {
+        top: 70px;
+        right: 15px;
+        z-index: 1500;
+    }
+
     .timetable-container { padding: 20px; }
     .timetable-header { flex-direction: column; align-items: flex-start; gap: 15px; }
 }

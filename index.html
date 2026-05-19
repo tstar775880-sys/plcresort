@@ -29,59 +29,66 @@
         <!-- ==================== 視圖一：地圖介面 ==================== -->
         <!-- 側邊控制面板 -->
         <aside id="sidebar" class="glass-panel">
+            <!-- 手機版摺疊面板控制條 -->
+            <div class="mobile-drag-handle">
+                <div class="drag-bar"></div>
+            </div>
+            
             <header class="sidebar-header">
                 <div class="resort-prefix">PROMISELAND RESORT</div>
                 <h1 class="resort-title">理想大地互動導覽</h1>
                 <p class="resort-subtitle">七月之旅專屬活動地圖</p>
             </header>
             
-            <section class="controls-section">
-                <!-- 篩選器 -->
-                <div class="filter-group">
-                    <label class="filter-label">活動類型篩選</label>
-                    <div class="filter-chips">
-                        <button class="chip active" data-type="all-spots">全部景點</button>
-                        <button class="chip" data-type="checkin-spots">打卡景點</button>
-                        <button class="chip" data-type="indoor-activities">館內活動</button>
-                        <button class="chip" data-type="offsite-activities">館外活動</button>
-                    </div>
-                </div>
-                
-                <div class="search-wrapper">
-                    <input type="text" id="activity-search" placeholder="搜尋活動名稱、地點..." />
-                </div>
-
-                <!-- 理想大地推薦打卡任務活動卡片 -->
-                <div class="checkin-quest-card">
-                    <div class="quest-title">理想推薦打卡任務</div>
-                    <div class="quest-desc">於指定打卡點拍照上傳官方 FB，超過 6 則即可至大廳櫃檯兌換精美小禮物！</div>
-                    
-                    <div class="quest-progress-row">
-                        <span class="quest-progress-text" id="quest-progress-label">已打卡: 0 / 6 則 (還差 6 則)</span>
-                        <a href="https://www.facebook.com/plcresorttw" target="_blank" class="fb-link-btn">前往官方FB</a>
-                    </div>
-                    <div class="quest-progress-bar-bg">
-                        <div class="quest-progress-bar-fill" id="quest-progress-fill" style="width: 0%"></div>
-                    </div>
-                    
-                    <details class="quest-details">
-                        <summary class="quest-summary">展開打卡景點清單</summary>
-                        <div class="quest-checklist styled-scroll" id="quest-checklist">
-                            <!-- JS 動態生成打卡景點勾選核取盒 -->
+            <div class="sidebar-scrollable-body styled-scroll">
+                <section class="controls-section">
+                    <!-- 篩選器 -->
+                    <div class="filter-group">
+                        <label class="filter-label">活動類型篩選</label>
+                        <div class="filter-chips">
+                            <button class="chip active" data-type="all-spots">全部景點</button>
+                            <button class="chip" data-type="checkin-spots">打卡景點</button>
+                            <button class="chip" data-type="indoor-activities">館內活動</button>
+                            <button class="chip" data-type="offsite-activities">館外活動</button>
                         </div>
-                    </details>
-                </div>
-            </section>
-
-            <!-- 活動列表滾動區 -->
-            <section class="list-section">
-                <div class="list-header">
-                    <span class="results-count" id="results-count">共 0 個項目</span>
-                </div>
-                <ul id="activities-list" class="styled-scroll">
-                    <!-- 動態渲染列表項 -->
-                </ul>
-            </section>
+                    </div>
+                    
+                    <div class="search-wrapper">
+                        <input type="text" id="activity-search" placeholder="搜尋活動名稱、地點..." />
+                    </div>
+    
+                    <!-- 理想大地推薦打卡任務活動卡片 -->
+                    <div class="checkin-quest-card">
+                        <div class="quest-title">理想推薦打卡任務</div>
+                        <div class="quest-desc">於指定打卡點拍照上傳官方 FB，超過 6 則即可至大廳櫃檯兌換精美小禮物！</div>
+                        
+                        <div class="quest-progress-row">
+                            <span class="quest-progress-text" id="quest-progress-label">已打卡: 0 / 6 則 (還差 6 則)</span>
+                            <a href="https://www.facebook.com/plcresorttw" target="_blank" class="fb-link-btn">前往官方FB</a>
+                        </div>
+                        <div class="quest-progress-bar-bg">
+                            <div class="quest-progress-bar-fill" id="quest-progress-fill" style="width: 0%"></div>
+                        </div>
+                        
+                        <details class="quest-details">
+                            <summary class="quest-summary">展開打卡景點清單</summary>
+                            <div class="quest-checklist styled-scroll" id="quest-checklist">
+                                <!-- JS 動態生成打卡景點勾選核取盒 -->
+                            </div>
+                        </details>
+                    </div>
+                </section>
+    
+                <!-- 活動列表區 (流式整合) -->
+                <section class="list-section">
+                    <div class="list-header">
+                        <span class="results-count" id="results-count">共 0 個項目</span>
+                    </div>
+                    <ul id="activities-list">
+                        <!-- 動態渲染列表項 -->
+                    </ul>
+                </section>
+            </div>
             
             <footer class="sidebar-footer">
                 <div class="official-pdf-links">

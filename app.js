@@ -614,6 +614,12 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 state.activeFocusMarker.openPopup();
             }
+
+            // 手機版優化：點選活動列表後，自動收合底部抽屜以利使用者觀看地圖！
+            if (window.innerWidth <= 900) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) sidebar.classList.remove('expanded');
+            }
         }
     }
 
@@ -1158,6 +1164,25 @@ document.addEventListener("DOMContentLoaded", () => {
         updateQuestProgress();
     }
 
+    // ==================== 7.8 手機版底部抽屜 (Sliding Bottom Sheet) 控制 ====================
+    function initMobileBottomSheet() {
+        const sidebar = document.getElementById('sidebar');
+        const handle = document.querySelector('.mobile-drag-handle');
+        const header = document.querySelector('.sidebar-header');
+        
+        if (!sidebar) return;
+        
+        // 點擊拖曳把手或標題區域，切換展開/摺疊狀態
+        const toggleSidebar = () => {
+            if (window.innerWidth <= 900) {
+                sidebar.classList.toggle('expanded');
+            }
+        };
+        
+        if (handle) handle.addEventListener('click', toggleSidebar);
+        if (header) header.addEventListener('click', toggleSidebar);
+    }
+
     // ==================== 8. 初始化執行觸發 ====================
     
     // 首次載入時依據預設分頁同步右側核取盒狀態
@@ -1171,6 +1196,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 初始化推薦打卡景點任務
     initCheckinQuest();
+
+    // 初始化手機版底部抽屜控制
+    initMobileBottomSheet();
 
     // 地圖初次提示自動淡出
     setTimeout(() => {
