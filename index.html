@@ -19,11 +19,13 @@
 </head>
 <body>
 
-    <!-- 手機版漢堡選單按鈕 (僅在手機端顯示) -->
+    <!-- 手機版右側導覽選單按鈕 (僅在手機端顯示，採用高質感圖層疊加 SVG 圖示) -->
     <button id="mobile-menu-btn" class="mobile-menu-toggle-btn glass-panel-light">
-        <span class="hamburger-bar"></span>
-        <span class="hamburger-bar"></span>
-        <span class="hamburger-bar"></span>
+        <svg class="icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cfa056" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+        </svg>
     </button>
 
     <!-- 手機版側邊快捷導覽選單 (Drawer) -->
@@ -106,9 +108,22 @@
             </div>
             
             <header class="sidebar-header">
-                <div class="resort-prefix">PROMISELAND RESORT</div>
-                <h1 class="resort-title">理想大地互動導覽</h1>
-                <p class="resort-subtitle">七月之旅專屬活動地圖</p>
+                <div class="sidebar-header-left">
+                    <div class="resort-prefix">PROMISELAND RESORT</div>
+                    <h1 class="resort-title">理想大地互動導覽</h1>
+                    <p class="resort-subtitle" style="margin-top: 2px;">七月之旅專屬活動地圖</p>
+                </div>
+                <!-- 手機版活動列表切換按鈕 (只在手機端顯示，採用高質感精緻清單 SVG 圖示) -->
+                <div class="mobile-list-toggle-icon">
+                    <svg class="list-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cfa056" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"/>
+                        <line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <circle cx="3" cy="6" r="1.5" fill="#cfa056"/>
+                        <circle cx="3" cy="12" r="1.5" fill="#cfa056"/>
+                        <circle cx="3" cy="18" r="1.5" fill="#cfa056"/>
+                    </svg>
+                </div>
             </header>
             
             <div class="sidebar-scrollable-body styled-scroll">

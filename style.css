@@ -1021,16 +1021,41 @@ body, html {
         display: inline-block;
     }
     
-    /* 在標題後方加上優雅的展開/收合提示小箭頭 */
-    .resort-title::after {
-        content: ' ▴';
-        font-size: 12px;
-        color: var(--accent-gold);
-        transition: transform 0.3s ease;
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px 14px 20px;
+        cursor: pointer;
+        background: rgba(10, 18, 15, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
     
-    #sidebar.expanded .resort-title::after {
-        content: ' ▾';
+    .sidebar-header-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .mobile-list-toggle-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    
+    #sidebar.expanded .mobile-list-toggle-icon {
+        background: rgba(207, 160, 86, 0.12);
+        border-color: var(--accent-gold);
+        transform: rotate(180deg); /* 展開時旋轉 180 度，展現極致精品質感 */
+        box-shadow: 0 0 8px rgba(207, 160, 86, 0.3);
     }
     
     .resort-subtitle {
@@ -1753,7 +1778,7 @@ body, html {
     box-shadow: 0 0 6px rgba(207, 160, 86, 0.6);
 }
 
-/* ==================== Mobile Floating Hamburger Button ==================== */
+/* ==================== Mobile Floating Drawer Button ==================== */
 .mobile-menu-toggle-btn {
     display: none; /* Desktop hidden */
 }
@@ -1761,13 +1786,12 @@ body, html {
 @media (max-width: 900px) {
     .mobile-menu-toggle-btn {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 4px;
         position: fixed;
         top: 15px;
-        left: 15px;
+        right: 15px; /* 移到右上角，方便右手單手點選 */
+        left: auto;
         width: 44px;
         height: 44px;
         border-radius: 50%;
@@ -1775,7 +1799,7 @@ body, html {
         background: rgba(10, 18, 15, 0.85); /* 深色背景，更融合 */
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        z-index: 2500; /* 高於地圖與大廳高亮，與右上角視圖同等重要 */
+        z-index: 2500; /* 高於地圖，與右上角視圖同等重要 */
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
@@ -1787,12 +1811,12 @@ body, html {
         background: rgba(10, 18, 15, 0.95);
     }
     
-    .hamburger-bar {
-        width: 18px;
-        height: 2px;
-        background-color: var(--accent-gold);
-        border-radius: 2px;
-        transition: all 0.3s ease;
+    .mobile-menu-toggle-btn svg {
+        transition: transform 0.3s ease;
+    }
+    
+    .mobile-menu-toggle-btn:hover svg {
+        transform: scale(1.1);
     }
 }
 
@@ -1800,22 +1824,25 @@ body, html {
 .mobile-nav-drawer {
     position: fixed;
     top: 0;
-    left: -290px; /* 預設在螢幕左側外 */
+    right: -290px; /* 預設在螢幕右側外 */
+    left: auto;
     width: 280px;
     height: 100vh;
     background: rgba(10, 18, 15, 0.96); /* 經典深苔蘚綠色，與整體風格統一 */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 2900; /* 高於控制按鈕，低於彈窗 */
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-    transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); /* 陰影往左投射 */
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--border-glass);
+    border-left: 1px solid var(--border-glass);
+    border-right: none;
 }
 
 .mobile-nav-drawer.open {
-    left: 0;
+    right: 0;
+    left: auto;
 }
 
 .drawer-header-brand {
