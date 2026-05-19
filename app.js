@@ -470,7 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lineJoin: 'round'
     }).addTo(mapGroups.attraction);
     fishFeedingPoly.bindTooltip("親子餵魚區 (生態親水平台)", { sticky: true, className: 'custom-tooltip' });
-    bindLocationClick(fishFeedingPoly, "親子餵魚區", RESORT_LOCATIONS["竹筏碼頭"]);
+    bindLocationClick(fishFeedingPoly, "親子餵魚區", RESORT_LOCATIONS["親子餵魚區"]);
 
     // 13.99 豐之谷 - 服務中心與單車租借站 (特製質感紅磚色多邊形，彰顯核心服務地標)
     const serviceCenterPoly = L.polygon(OSM_BUILDING_FENGZHIGU_SERVICE_CENTER, {
@@ -1667,7 +1667,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (activeFilter === 'all-spots') {
             // == 全部景點 ==
-            // 保持全部選項可見，不強制預設勾選任何圖層，讓使用者自己選
+            // 自動勾選並呈現「住宿、餐廳、橋樑、景點、碼頭」核心圖層，讓地圖更為豐富飽滿
+            Object.keys(layerCheckboxes).forEach(key => {
+                const checkbox = layerCheckboxes[key];
+                if (checkbox && key !== 'toilet' && key !== 'checkin') {
+                    checkbox.checked = true;
+                    mapGroups[key].addTo(map);
+                }
+            });
+            updateSelectAllState();
         } 
         else if (activeFilter === 'checkin-spots') {
             // == 打卡景點 ==
@@ -1686,7 +1694,19 @@ document.addEventListener("DOMContentLoaded", () => {
             // == 館內活動 ==
             // 隱藏「推薦打卡」核取盒，顯示「餐廳、廁所、橋樑、景點、碼頭」
             layerCheckboxes.checkin.parentElement.style.display = 'none';
-            // 預設全部不勾選，維持地圖極致清爽與融入背景
+            // 自動勾選並呈現「景點、餐廳、碼頭」這三個有排定活動的場館建築多邊形！
+            if (layerCheckboxes.attraction) {
+                layerCheckboxes.attraction.checked = true;
+                mapGroups.attraction.addTo(map);
+            }
+            if (layerCheckboxes.restaurant) {
+                layerCheckboxes.restaurant.checked = true;
+                mapGroups.restaurant.addTo(map);
+            }
+            if (layerCheckboxes.dock) {
+                layerCheckboxes.dock.checked = true;
+                mapGroups.dock.addTo(map);
+            }
             updateSelectAllState();
         } 
         else if (activeFilter === 'offsite-activities') {
