@@ -1644,3 +1644,33 @@ body, html {
     border-top-color: rgba(231, 76, 60, 0.6) !important;
 }
 
+/* --- 緊湊清爽版側邊欄項目 --- */
+.activity-item-compact {
+    padding: 12px 16px !important;
+    margin-bottom: 8px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.item-header-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.item-location-compact {
+    font-size: 11px;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.item-name-compact {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+}
+

@@ -545,36 +545,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
         elCount.textContent = `共 ${filteredData.length} 個項目`;
 
+        // 恢復接待大廳的預設外觀
+        if (typeof buildingLobbyPoly !== 'undefined' && buildingLobbyPoly) {
+            buildingLobbyPoly.setStyle({
+                color: '#a29bfe',
+                weight: 2.5,
+                fillColor: '#a29bfe',
+                fillOpacity: 0.2
+            });
+            buildingLobbyPoly.unbindTooltip();
+            buildingLobbyPoly.bindTooltip("接待大廳 (Lobby 建築主體)", { sticky: true, className: 'custom-tooltip' });
+        }
+
         // 清除舊標記
         state.markers.forEach(m => map.removeLayer(m));
         state.markers = [];
         elList.innerHTML = '';
 
         if (state.activeFilter === 'offsite-activities') {
-            // 建立一個精緻奢華的「飯店門口 (館外活動集合點)」標記並自動在地圖上呈現
-            const offsiteBaseMarker = L.circleMarker(RESORT_LOCATIONS["飯店門口"], {
-                radius: 9,
-                fillColor: '#e74c3c',   // 精緻石榴紅
-                color: '#ffffff',       // 純白邊框
-                weight: 2,
-                opacity: 1,
-                fillOpacity: 0.95
-            }).addTo(map);
-            
-            offsiteBaseMarker.bindTooltip("飯店大廳門口 (所有館外行程之集合與出發點)", { 
-                permanent: true, 
-                direction: 'top', 
-                className: 'custom-tooltip-permanent' 
-            });
-            
-            // 點擊此標記也可以觸發點擊事件，查看此處所有的館外活動！
-            bindLocationClick(offsiteBaseMarker, "飯店大廳門口", RESORT_LOCATIONS["飯店門口"]);
-            
-            state.markers.push(offsiteBaseMarker);
+            // 接待大廳框框高亮顯示為館外行程集合點 (不使用額外紅點)
+            if (typeof buildingLobbyPoly !== 'undefined' && buildingLobbyPoly) {
+                buildingLobbyPoly.setStyle({
+                    color: '#e74c3c', // 醒目的石榴紅
+                    weight: 3.5,
+                    fillColor: '#e74c3c',
+                    fillOpacity: 0.35
+                });
+                buildingLobbyPoly.unbindTooltip();
+                buildingLobbyPoly.bindTooltip("接待大廳 (所有館外行程之集合與出發點)", { 
+                    permanent: true, 
+                    direction: 'center', 
+                    className: 'custom-tooltip-permanent' 
+                }).openTooltip();
+            }
         }
 
         // 座標偏移計算器 (防重疊)
         const coordOffsetCount = {};
+
+        // 側邊清單生成與地圖標記動態綁定
+        if (state.activeFilter === 'indoor-activities') {
+            // 依地點名稱將活動進行分群，只顯示符合子篩選的點
+            const locationsGroup = {};
+            filteredData.forEach(item => {
+                if (item.coords) {
+                    const locKey = item.locationName;
+                    if (!locationsGroup[locKey]) {
+                        locationsGroup[locKey] = {
+                            name: locKey,
+                            coords: item.coords,
+                            activities: []
+                        };
+                    }
+                    locationsGroup[locKey].activities.push(item);
+                }
+            });
+
+            // 為每個有活動的地點繪製一個精緻圓標記
+            Object.values(locationsGroup).forEach(loc => {
+                const hasFree = loc.activities.some(act => act.type === 'free');
+                const hasPaid = loc.activities.some(act => act.type === 'paid');
+                
+                // 決定點位配色：全免費=綠色，全付費=金色，混合=橘色
+                let fillColor = '#e67e22'; // 混合
+                if (hasFree && !hasPaid) fillColor = '#2ecc71'; // 全免費
+                if (!hasFree && hasPaid) fillColor = '#cfa056'; // 全付費
+
+                const marker = L.circleMarker(loc.coords, {
+                    radius: 8.5,
+                    fillColor: fillColor,
+                    color: '#ffffff',
+                    weight: 1.8,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map);
+
+                marker.bindTooltip(`${loc.name} (${loc.activities.length}項活動)`, { 
+                    sticky: true, 
+                    className: 'custom-tooltip' 
+                });
+
+                bindLocationClick(marker, loc.name, loc.coords);
+                state.markers.push(marker);
+            });
+        }
 
         filteredData.forEach(item => {
             const coordKey = item.coords ? `${item.coords[0].toFixed(5)},${item.coords[1].toFixed(5)}` : '0,0';
@@ -593,19 +647,17 @@ document.addEventListener("DOMContentLoaded", () => {
                                (item.type === 'paid' ? 'badge-paid' : 
                                (item.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
 
-            // 側邊清單項目生成
+            // 側邊清單項目生成 (緊湊清爽版：僅顯示類別與標題)
             const li = document.createElement('li');
-            li.className = `activity-item ${state.selectedId === item.id ? 'active' : ''}`;
+            li.className = `activity-item activity-item-compact ${state.selectedId === item.id ? 'active' : ''}`;
             li.dataset.id = item.id;
             
             li.innerHTML = `
-                <span class="item-badge ${badgeClass}">${typeLabel}</span>
-                <h3 class="item-name">${item.name}</h3>
-                <div class="item-meta">
-                    <div class="meta-row"><span class="meta-label">地點</span><span class="meta-value">${item.locationName}</span></div>
-                    <div class="meta-row"><span class="meta-label">時間</span><span class="meta-value">${item.time}</span></div>
-                    <div class="meta-row"><span class="meta-label">費用</span><span class="meta-value">${item.price}</span></div>
+                <div class="item-header-compact">
+                    <span class="item-badge ${badgeClass}">${typeLabel}</span>
+                    <span class="item-location-compact">${item.locationName}</span>
                 </div>
+                <h3 class="item-name-compact">${item.name}</h3>
             `;
 
             li.addEventListener('click', () => {
