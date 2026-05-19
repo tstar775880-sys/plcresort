@@ -903,13 +903,13 @@ body, html {
     .view-toggle-container {
         top: 15px;
         right: 15px;
-        z-index: 1500;
+        z-index: 2500 !important; /* 確保高於時間總表的 1500，任何時候都點得到！ */
     }
     
     #map-layer-control {
         top: 70px;
         right: 15px;
-        z-index: 1500;
+        z-index: 1800; /* 高於地圖與普通標記，但低於視圖切換按鈕 */
     }
 
     .timetable-container { padding: 20px; }
@@ -1082,7 +1082,16 @@ body, html {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+}
+
+#map-layer-control.collapsed {
+    padding-bottom: 12px;
+}
+
+#map-layer-control.collapsed .layer-control-options {
+    display: none !important;
 }
 
 .layer-control-title {
@@ -1094,6 +1103,28 @@ body, html {
     letter-spacing: 1px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 6px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#map-layer-control.collapsed .layer-control-title {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.layer-caret {
+    font-size: 10px;
+    color: var(--accent-gold);
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+#map-layer-control:not(.collapsed) .layer-caret {
+    transform: rotate(180deg);
 }
 
 .layer-control-options {

@@ -29,6 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     L.control.layers(baseMaps, null, { position: 'bottomright' }).addTo(map);
 
+    // 當地圖上的 Popup 被關閉時，自動清除可能存在的高亮點
+    map.on('popupclose', () => {
+        if (state.activeFocusMarker) {
+            map.removeLayer(state.activeFocusMarker);
+            state.activeFocusMarker = null;
+        }
+    });
+
     // 2.5 初始化地圖圖層分類群組 (LayerGroup，預設全部不加入地圖以保持清爽)
     const mapGroups = {
         accommodation: L.layerGroup(),
@@ -1183,6 +1191,24 @@ document.addEventListener("DOMContentLoaded", () => {
         if (header) header.addEventListener('click', toggleSidebar);
     }
 
+    // ==================== 7.9 地圖圖層面板摺疊控制 ====================
+    function initCollapsibleLayerControl() {
+        const toggleBtn = document.getElementById('layer-control-toggle');
+        const layerControl = document.getElementById('map-layer-control');
+        
+        if (!toggleBtn || !layerControl) return;
+        
+        // 點擊標題切換摺疊狀態
+        toggleBtn.addEventListener('click', () => {
+            layerControl.classList.toggle('collapsed');
+        });
+        
+        // 手機版（寬度 <= 900px）預設摺疊，以防擋住地圖
+        if (window.innerWidth <= 900) {
+            layerControl.classList.add('collapsed');
+        }
+    }
+
     // ==================== 8. 初始化執行觸發 ====================
     
     // 首次載入時依據預設分頁同步右側核取盒狀態
@@ -1199,6 +1225,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 初始化手機版底部抽屜控制
     initMobileBottomSheet();
+
+    // 初始化地圖圖層摺疊控制
+    initCollapsibleLayerControl();
 
     // 地圖初次提示自動淡出
     setTimeout(() => {
