@@ -37,6 +37,87 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // 當地圖上的 Popup 被開啟時，自動綁定精緻輪播圖 (Carousel) 互動功能與左右切換按鈕！
+    map.on('popupopen', (e) => {
+        const carousel = document.getElementById('popup-carousel-container');
+        if (!carousel) return;
+        
+        const slidesInner = document.getElementById('carousel-slides-inner');
+        const prevBtn = document.getElementById('carousel-prev');
+        const nextBtn = document.getElementById('carousel-next');
+        const dots = carousel.querySelectorAll('.carousel-dot');
+        
+        let currentIndex = parseInt(carousel.dataset.initialIndex || '0', 10);
+        const totalSlides = dots.length;
+        
+        // 取得該地點的所有活動資料，以便在輪播切換時同步側邊欄高亮
+        const popupLatLng = e.popup.getLatLng();
+        const coords = [popupLatLng.lat, popupLatLng.lng];
+        const coordActivities = getActivitiesAtCoords(coords);
+
+        function updateCarousel(index) {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= totalSlides) currentIndex = totalSlides - 1;
+            
+            // 滑動動畫
+            slidesInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // 更新 Dots 狀態
+            dots.forEach((dot, idx) => {
+                if (idx === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+            
+            // 更新按鈕啟用狀態
+            if (prevBtn) prevBtn.disabled = currentIndex === 0;
+            if (nextBtn) nextBtn.disabled = currentIndex === totalSlides - 1;
+            
+            // 同步高亮左側清單，並讓清單平滑滾動到對應項！
+            if (coordActivities && coordActivities[currentIndex]) {
+                const actId = coordActivities[currentIndex].id;
+                state.selectedId = actId;
+                
+                const items = elList.querySelectorAll('.activity-item');
+                items.forEach(item => {
+                    if (item.dataset.id === actId) {
+                        item.classList.add('active');
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 綁定按鈕點擊監聽
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                updateCarousel(currentIndex - 1);
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                updateCarousel(currentIndex + 1);
+            });
+        }
+        
+        // 綁定 Dots 點擊監聽
+        dots.forEach(dot => {
+            dot.addEventListener('click', (ev) => {
+                const targetIdx = parseInt(ev.target.dataset.index, 10);
+                updateCarousel(targetIdx);
+            });
+        });
+        
+        // 初始化按鈕啟用狀態
+        updateCarousel(currentIndex);
+    });
+
     // 2.5 初始化地圖圖層分類群組 (LayerGroup，預設全部不加入地圖以保持清爽)
     const mapGroups = {
         accommodation: L.layerGroup(),
@@ -801,10 +882,13 @@ document.addEventListener("DOMContentLoaded", () => {
             // 找出所有與此活動相同座標的活動項目！
             const coordActivities = getActivitiesAtCoords(activity.coords);
             
+            const activeIndex = coordActivities.findIndex(act => act.id === id);
+            const initialIndex = activeIndex >= 0 ? activeIndex : 0;
+            
             let popupHtml = '';
-            if (showSingleOnly || coordActivities.length <= 1) {
-                // 單一活動：原先的極致清爽彈出框
-                const act = activity;
+            if (coordActivities.length <= 1) {
+                // 純單一活動，不渲染輪播控制
+                const act = coordActivities[0] || activity;
                 const typeLabel = act.type === 'free' ? '館內免費' : 
                                   (act.type === 'paid' ? '館內付費' : 
                                   (act.type === 'offsite' ? '館外行程' : '推薦打卡'));
@@ -823,19 +907,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
             } else {
-                // 多個活動疊加：構建 consolidated 滾動彈出框！
+                // 統一的精緻卡片輪播圖 (Carousel)！
                 popupHtml = `
-                    <div class="custom-popup consolidated-popup styled-scroll">
-                        <div class="popup-header-main">
-                            <span class="popup-badge badge-checkin">多項活動地點</span>
-                            <h3 class="popup-main-location-title">${activity.locationName}</h3>
-                        </div>
-                        <p class="consolidated-sub">此地點共有 ${coordActivities.length} 個項目：</p>
-                        <div class="popup-consolidated-list styled-scroll">
+                    <div class="popup-carousel" id="popup-carousel-container" data-initial-index="${initialIndex}">
+                        <div class="carousel-window">
+                            <div class="carousel-slides" id="carousel-slides-inner" style="width: ${coordActivities.length * 100}%; transform: translateX(-${initialIndex * 100}%);">
                 `;
                 
-                coordActivities.forEach(act => {
-                    const isSelected = act.id === id;
+                coordActivities.forEach((act) => {
                     const typeLabel = act.type === 'free' ? '館內免費' : 
                                       (act.type === 'paid' ? '館內付費' : 
                                       (act.type === 'offsite' ? '館外行程' : '推薦打卡'));
@@ -844,19 +923,35 @@ document.addEventListener("DOMContentLoaded", () => {
                                        (act.type === 'offsite' ? 'badge-offsite' : 'badge-checkin'));
                     
                     popupHtml += `
-                        <div class="popup-consolidated-item ${isSelected ? 'selected-highlight' : ''}">
-                            <div class="popup-item-header">
+                        <div class="carousel-slide" style="width: ${100 / coordActivities.length}%;">
+                            <div class="custom-popup" style="padding-bottom: 0;">
                                 <span class="popup-badge ${badgeClass}">${typeLabel}</span>
-                                <h4 class="popup-item-name">${act.name}</h4>
+                                <h3 class="popup-title">${act.name}</h3>
+                                <div class="popup-info-row"><span class="popup-label">地點：</span>${act.locationName}</div>
+                                <div class="popup-info-row"><span class="popup-label">時間：</span>${act.time}</div>
+                                <div class="popup-info-row"><span class="popup-label">費用：</span>${act.price}</div>
+                                <p class="popup-desc" style="max-height: 120px; overflow-y: auto; padding-right: 4px;">${act.desc}</p>
                             </div>
-                            <div class="popup-info-row"><span class="popup-label">時間：</span>${act.time}</div>
-                            <div class="popup-info-row"><span class="popup-label">費用：</span>${act.price}</div>
-                            <p class="popup-desc">${act.desc}</p>
                         </div>
                     `;
                 });
                 
                 popupHtml += `
+                            </div>
+                        </div>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn prev-btn" id="carousel-prev">&lsaquo;</button>
+                            <div class="carousel-dots">
+                `;
+                
+                coordActivities.forEach((act, idx) => {
+                    const isActive = idx === initialIndex;
+                    popupHtml += `<span class="carousel-dot ${isActive ? 'active' : ''}" data-index="${idx}"></span>`;
+                });
+                
+                popupHtml += `
+                            </div>
+                            <button class="carousel-btn next-btn" id="carousel-next">&rsaquo;</button>
                         </div>
                     </div>
                 `;

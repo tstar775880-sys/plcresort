@@ -1674,3 +1674,86 @@ body, html {
     line-height: 1.3;
 }
 
+/* ==================== Leaflet Popup Carousel ==================== */
+.popup-carousel {
+    width: 270px;
+    position: relative;
+    font-family: var(--font-sans);
+}
+
+.carousel-window {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-slides {
+    display: flex;
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.carousel-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.carousel-btn {
+    background: transparent;
+    border: none;
+    color: var(--accent-gold);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: all 0.2s ease;
+    user-select: none;
+    line-height: 1;
+}
+
+.carousel-btn:hover {
+    color: #ffffff;
+    transform: scale(1.2);
+}
+
+.carousel-btn:disabled {
+    color: rgba(255, 255, 255, 0.15);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-dot:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.carousel-dot.active {
+    background: var(--accent-gold);
+    transform: scale(1.3);
+    box-shadow: 0 0 6px rgba(207, 160, 86, 0.6);
+}
+
