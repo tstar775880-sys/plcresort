@@ -1982,7 +1982,7 @@ const ACTIVITIES = [
 
   // --- 館內付費：ZEN SPA 療程 (新整合) ---
   {
-    id: "p6",
+    id: "p14",
     type: "paid",
     category: "館內付費",
     name: "ZEN SPA - 熱石能量",
@@ -1996,7 +1996,7 @@ const ACTIVITIES = [
     desc: "芳香舒壓按摩結合溫熱玄武石，深層釋放緊繃肌肉，促進身體循環。(官方2025療程手冊)"
   },
   {
-    id: "p7",
+    id: "p15",
     type: "paid",
     category: "館內付費",
     name: "ZEN SPA - 漫步雲端",
@@ -2010,7 +2010,7 @@ const ACTIVITIES = [
     desc: "針對頭部與足部進行去角質及指壓按摩，有效改善腿部水腫、減緩頭部腫脹疲勞。(官方2025療程手冊)"
   },
   {
-    id: "p8",
+    id: "p16",
     type: "paid",
     category: "館內付費",
     name: "ZEN SPA - 韓式臉部保養",
