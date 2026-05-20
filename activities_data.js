@@ -1911,8 +1911,8 @@ const ACTIVITIES = [
     type: "free",
     category: "館內免費",
     name: "應許晚安遊行船",
-    locationName: "應許之河",
-    coords: RESORT_LOCATIONS["應許之河"],
+    locationName: "6號碼頭",
+    coords: RESORT_LOCATIONS["6號碼頭"],
     time: "21:45 - 22:00",
     slots: [
       { start: "21:45", end: "22:00" }
