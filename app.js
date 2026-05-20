@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weight: 2,
         opacity: 1,
         fillOpacity: 0.95
-    }).addTo(mapGroups.restaurant);
+    }).addTo(map);
     starbucksMarker.bindTooltip("星巴克花蓮理想門市 (全台最美童話屋星巴克)", { sticky: true, className: 'custom-tooltip' });
     bindLocationClick(starbucksMarker, "星巴克花蓮理想門市", RESORT_LOCATIONS["星巴克花蓮理想門市"]);
 
