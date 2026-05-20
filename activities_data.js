@@ -1661,7 +1661,7 @@ const OSM_BUILDING_FENGZHIGU_SERVICE_CENTER = [
 ];
 
 const ACTIVITIES = [
-  // --- 付費活動 ---
+  // --- 付費活動 (2026年度四月份最新官方行程) ---
   {
     id: "p1",
     type: "paid",
@@ -1669,13 +1669,13 @@ const ACTIVITIES = [
     name: "竹筏漂流趣",
     locationName: "竹筏碼頭",
     coords: RESORT_LOCATIONS["竹筏碼頭"],
-    time: "09:30 - 11:30, 14:30 - 16:30",
+    time: "08:30 - 12:00, 14:00 - 16:00",
     slots: [
-      { start: "09:30", end: "11:30" },
-      { start: "14:30", end: "16:30" }
+      { start: "08:30", end: "12:00" },
+      { start: "14:00", end: "16:00" }
     ],
     price: "350元/人",
-    desc: "乘坐原住民竹筏遊生態河道，介紹自然生態公園的故事，環繞生態小島觀察可愛的鳥類與小動物。"
+    desc: "乘坐原住民竹筏遊生態河道，介紹自然生態公園的故事，環繞生態小島觀察可愛的鳥類與小動物。(每艘船上限8人，每次行程約15分鐘)"
   },
   {
     id: "p2",
@@ -1684,12 +1684,12 @@ const ACTIVITIES = [
     name: "魚王之爭 (釣魚)",
     locationName: "豐之谷服務中心",
     coords: RESORT_LOCATIONS["豐之谷服務中心"],
-    time: "08:30 - 17:00",
+    time: "08:30 - 16:30",
     slots: [
-      { start: "08:30", end: "17:00" }
+      { start: "08:30", end: "16:30" }
     ],
     price: "350元/組",
-    desc: "大自然的生態魚池，挑戰以小釣竿釣起大魚！每次以2小時為限（適用年齡12歲以上）。"
+    desc: "大自然的生態魚池，挑戰以小釣竿釣起大魚！每次以2小時為限，限時2小時。(適用年齡12歲以上，器具歸還最晚為17:00)"
   },
   {
     id: "p3",
@@ -1704,7 +1704,7 @@ const ACTIVITIES = [
       { start: "15:00", end: "16:00" }
     ],
     price: "350元/份",
-    desc: "親手製作鄉村麵包的過程，揉捏烘焙出獨一無二的窯烤麵包。"
+    desc: "動動手，揉一揉，體驗親手製作鄉村麵包的過程！挽起袖子和我們一起來做出獨一無二的麵包吧！(2人成行)"
   },
   {
     id: "p4",
@@ -1718,7 +1718,7 @@ const ACTIVITIES = [
       { start: "14:00", end: "15:00" }
     ],
     price: "350元/人",
-    desc: "利用園區蕨類植物，透過簡單的上板技巧，製作屬於自己的創意植栽。"
+    desc: "使用簡單的工具與利用園區蕨類植物，透過簡單的上板技巧，製作屬於自己的創意植栽。(2人成行，請提前1小時預約)"
   },
   {
     id: "p5",
@@ -1732,7 +1732,7 @@ const ACTIVITIES = [
       { start: "16:00", end: "17:00" }
     ],
     price: "350元/人",
-    desc: "由專業活動教練帶領，一起享受植物藍染的樂趣與驚喜美感。"
+    desc: "從教學到體驗，有專業的活動教練帶領您一起享受植物藍染的樂趣與驚喜美感。(2人成行，7-11歲需家長陪同，6歲以下不開放)"
   },
   {
     id: "p6",
@@ -1746,7 +1746,7 @@ const ACTIVITIES = [
       { start: "17:30", end: "18:30" }
     ],
     price: "350元/份",
-    desc: "挑選喜歡的印記，敲打上色做一個獨一無二的皮雕飾品。"
+    desc: "挑選喜歡的印記，敲打上色做一個獨一無二的皮雕飾品。(4人成行，請提前1小時預約)"
   },
   {
     id: "p7",
@@ -1755,12 +1755,12 @@ const ACTIVITIES = [
     name: "遊艇環河導覽",
     locationName: "6號碼頭",
     coords: RESORT_LOCATIONS["6號碼頭"],
-    time: "08:30 - 21:30",
+    time: "08:30 - 22:00",
     slots: [
-      { start: "08:30", end: "21:30" }
+      { start: "08:30", end: "22:00" }
     ],
     price: "350元/次",
-    desc: "搭乘電動遊艇欣賞2.2公里應許之河，透過船長導覽解說，深入了解理想大地的自然與人文。"
+    desc: "搭乘電動遊艇欣賞2.2公里應許之河，微風輕徐，專業船長解說景觀特色、自然生態與藝術人文。(每艘船上限8-12人，非住客或無船券)"
   },
   {
     id: "p8",
@@ -1768,13 +1768,13 @@ const ACTIVITIES = [
     category: "館內付費",
     name: "娛樂室",
     locationName: "湖光山舍",
-    coords: RESORT_LOCATIONS["娛樂室"],
+    coords: RESORT_LOCATIONS["湖光山舍"],
     time: "09:00 - 21:00",
     slots: [
       { start: "09:00", end: "21:00" }
     ],
     price: "600元/2小時",
-    desc: "邀請三五好友一同進入楚河漢界的攻防戰，提供舒適的室內娛樂環境。"
+    desc: "邀請三五好友一同進入楚河漢界的攻防戰吧，提供舒適的室內娛樂環境。(採預約制，請於2小時前預約，室內禁止吸菸)"
   },
   {
     id: "p9",
@@ -1787,8 +1787,8 @@ const ACTIVITIES = [
     slots: [
       { start: "14:30", end: "23:00" }
     ],
-    price: "低消 180元/人",
-    desc: "提供各式蛋糕點心、在地手調飲品，眺望美麗的河景與遠山，仿佛置身異國莊園。"
+    price: "低消 180元起/人",
+    desc: "提供各式蛋糕點心、在地手調飲品，一望無際的落地窗景，彷彿身處異國莊園之中。(最後點單時間為22:00，營業時間禁帶外食)"
   },
   {
     id: "p10",
@@ -1801,8 +1801,8 @@ const ACTIVITIES = [
     slots: [
       { start: "20:40", end: "21:40" }
     ],
-    price: "低消 180元/人",
-    desc: "駐唱歌手演唱多首經典名曲、原住民歌曲，在浪漫夜色中與音樂共舞。"
+    price: "低消 180元起/人",
+    desc: "駐唱歌手演唱多首經典名曲、原民風歌曲，一同愜意悠閒享受美好時光！(演奏時間為50分鐘，如遇調整場地另行通知)"
   },
   {
     id: "p11",
@@ -1811,176 +1811,97 @@ const ACTIVITIES = [
     name: "森活的呼喚 主題遊程",
     locationName: "豐之谷服務中心",
     coords: RESORT_LOCATIONS["豐之谷服務中心"],
-    time: "09:30 - 11:30",
+    time: "09:00 - 10:40",
     slots: [
-      { start: "09:30", end: "11:30" }
+      { start: "09:00", end: "10:40" }
     ],
-    price: "700元/人",
-    desc: "包含箭道傳承、原民風味窯烤披薩、手作箭竹串珠項鍊等豐富的系列遊程體驗。"
+    price: "800元/人 (房客700元)",
+    desc: "包含箭道傳承、原民風味窯烤披薩、手作箭竹串珠項鍊等豐富的系列體驗。(全程約100分鐘，4人成行，請於前一日22:00預約)"
   },
   {
     id: "p12",
     type: "paid",
     category: "館內付費",
-    name: "鐵馬自由行 (單車)",
-    locationName: "豐之谷服務中心",
-    coords: RESORT_LOCATIONS["豐之谷服務中心"],
-    time: "08:30 - 17:30",
-    slots: [
-      { start: "08:30", end: "17:30" }
-    ],
-    price: "200元起",
-    desc: "提供單車及地圖，讓您盡情延伸休閒版圖，漫遊鄉間小路。"
-  },
-  {
-    id: "p13",
-    type: "paid",
-    category: "館內付費",
-    name: "Li Nao 逍遙遊 (導覽)",
-    locationName: "豐之谷服務中心",
-    coords: RESORT_LOCATIONS["豐之谷服務中心"],
-    time: "14:30 - 16:30",
-    slots: [
-      { start: "14:30", end: "16:30" }
-    ],
-    price: "350元/人",
-    desc: "探索綠地，由導覽員講解沿途自然景觀、動植物，分享生態知識。"
-  },
-
-  // --- 免費活動 ---
-  {
-    id: "f1",
-    type: "free",
-    category: "館內免費",
-    name: "免費活動租借 (戶外)",
+    name: "鐵馬自由行",
     locationName: "豐之谷服務中心",
     coords: RESORT_LOCATIONS["豐之谷服務中心"],
     time: "08:30 - 17:00",
     slots: [
       { start: "08:30", end: "17:00" }
     ],
-    price: "免費",
-    desc: "提供籃球、羽球、排球、足球、槌球等戶外球具租借服務。"
+    price: "200元起 (單人單車)",
+    desc: "提供單車及地圖，您可盡情延伸休閒版圖，遊遍鄉間小路，享受單車小旅行。"
   },
   {
-    id: "f2",
-    type: "free",
-    category: "館內免費",
-    name: "免費活動租借 (室內)",
-    locationName: "湖光山舍",
-    coords: RESORT_LOCATIONS["湖光山舍"],
-    time: "08:30 - 21:00",
+    id: "p13",
+    type: "paid",
+    category: "館內付費",
+    name: "Li Nao 逍遙遊",
+    locationName: "豐之谷服務中心",
+    coords: RESORT_LOCATIONS["豐之谷服務中心"],
+    time: "15:00 - 17:00",
     slots: [
-      { start: "08:30", end: "21:00" }
+      { start: "15:00", end: "17:00" }
     ],
-    price: "免費",
-    desc: "提供撞球、手足球等室內休閒器材租借。"
+    price: "350元/人",
+    desc: "探索純樸的綠地，享受單車或小火車騎行的樂趣，導覽員將講解沿途生态、植物和動物，分享永續環境知識。(4人成行)"
   },
   {
-    id: "f3",
-    type: "free",
-    category: "館內免費",
-    name: "休閒中心 (健身房)",
-    locationName: "湖光山舍",
-    coords: RESORT_LOCATIONS["休閒中心"],
-    time: "09:00 - 12:00, 14:00 - 17:00, 18:00 - 22:00",
-    slots: [
-      { start: "09:00", end: "12:00" },
-      { start: "14:00", end: "17:00" },
-      { start: "18:00", end: "22:00" }
-    ],
-    price: "免費",
-    desc: "配備跑步機、滑步機、健身車等專業健身器材，入內須穿著運動服裝與運動鞋。"
-  },
-  {
-    id: "f4",
-    type: "free",
-    category: "館內免費",
-    name: "桌遊租借",
-    locationName: "湖光山舍",
-    coords: RESORT_LOCATIONS["湖光山舍"],
-    time: "08:30 - 21:00",
-    slots: [
-      { start: "08:30", end: "21:00" }
-    ],
-    price: "免費",
-    desc: "現場提供多款趣味桌遊供房客於休閒中心內一同歡樂。"
-  },
-  {
-    id: "f5",
-    type: "free",
-    category: "館內免費",
-    name: "應許晚安遊行船",
-    locationName: "6號碼頭",
-    coords: RESORT_LOCATIONS["6號碼頭"],
-    time: "21:45 - 22:00",
-    slots: [
-      { start: "21:45", end: "22:00" }
-    ],
-    price: "免費",
-    desc: "在浪漫平靜的夜色中，理想大地天使們獻上真摯的祝福遊行，適合於麥迪遜橋或碼頭觀看。"
-  },
-  {
-    id: "f6",
-    type: "free",
-    category: "館內免費",
-    name: "晨光瑜珈",
-    locationName: "賽維亞草原",
-    coords: RESORT_LOCATIONS["賽維亞草原"],
-    time: "08:00 - 08:30",
-    slots: [
-      { start: "08:00", end: "08:30" }
-    ],
-    price: "免費",
-    desc: "接觸大自然的律動，透過簡單舒緩的瑜珈動作放鬆身心。"
-  },
-  {
-    id: "f7",
-    type: "free",
-    category: "館內免費",
-    name: "兒童遊戲屋 (Niño Club)",
-    locationName: "大廳二樓",
-    coords: RESORT_LOCATIONS["大廳二樓"],
-    time: "09:00 - 12:00, 14:00 - 17:00",
-    slots: [
-      { start: "09:00", end: "12:00" },
-      { start: "14:00", end: "17:00" }
-    ],
-    price: "免費",
-    desc: "專屬於小朋友的室內遊玩與創作空間，入內需穿著襪子。"
-  },
-  {
-    id: "f8",
-    type: "free",
-    category: "館內免費",
-    name: "寵物樂園 (Pet Land)",
-    locationName: "大島",
-    coords: RESORT_LOCATIONS["寵物樂園"],
-    time: "09:00 - 11:00, 15:00 - 17:30",
-    slots: [
-      { start: "09:00", end: "11:00" },
-      { start: "15:00", end: "17:30" }
-    ],
-    price: "免費",
-    desc: "為毛小孩準備的寬敞草地跑跳活動空間，盡情享受陽光綠地。"
-  },
-  {
-    id: "f9",
-    type: "free",
-    category: "館內免費",
-    name: "造型泳池與親水區",
+    id: "p17",
+    type: "paid",
+    category: "館內付費",
+    name: "獨木舟",
     locationName: "中島造型泳池",
     coords: RESORT_LOCATIONS["中島"],
-    time: "08:30 - 12:00, 14:00 - 21:30",
+    time: "14:00 - 16:00",
     slots: [
-      { start: "08:30", end: "12:00" },
-      { start: "14:00", end: "21:30" }
+      { start: "14:00", end: "16:00" }
     ],
-    price: "免費",
-    desc: "熱門的中島造型池、岩洞式設計水池與兒童親水區，須穿著泳衣泳帽入內。"
+    price: "350元/人",
+    desc: "在專業教練的熱情指導下，體驗划獨木舟的驚喜與簡單樂趣。(每梯15分鐘，最多4人，7歲以下或80KG以上暫不開放，前1小時預約)"
+  },
+  {
+    id: "p18",
+    type: "paid",
+    category: "館內付費",
+    name: "轉盤上的記憶 - 黑膠音樂時光",
+    locationName: "湖畔小憩",
+    coords: RESORT_LOCATIONS["湖畔小憩"],
+    time: "20:10 - 20:40",
+    slots: [
+      { start: "20:10", end: "20:40" }
+    ],
+    price: "低消 180元起/人 (非專案貴賓)",
+    desc: "在數位音樂充斥的時代，回到最純粹的聆聽體驗，透過黑膠唱片的溫暖音色，感受音樂的細膩與品味態度。"
+  },
+  {
+    id: "p19",
+    type: "paid",
+    category: "館內付費",
+    name: "樂透賓果大連線",
+    locationName: "湖畔小憩",
+    coords: RESORT_LOCATIONS["湖畔小憩"],
+    time: "21:40 - 22:10",
+    slots: [
+      { start: "21:40", end: "22:10" }
+    ],
+    price: "150元/張",
+    desc: "拿出您的賓果卡，因為大獎可能就在您手上！(每週六晚會後開獎，湖畔小憩販售賓果卡)"
+  },
+  {
+    id: "p20",
+    type: "paid",
+    category: "館內付費",
+    name: "活動7選3 (住客專屬年度優惠)",
+    locationName: "豐之谷服務中心",
+    coords: RESORT_LOCATIONS["豐之谷服務中心"],
+    time: "依各活動表時間",
+    slots: [],
+    price: "420元/套",
+    desc: "超夯好玩活動任選三項體驗，加贈『湖畔小憩折價券$50元』。(可選活動:遊艇/竹筏/藍染/魚王之爭/獨木舟/蕨色之旅/皮雕工坊，不可複選)"
   },
 
-  // --- 館內付費：ZEN SPA 療程 (新整合) ---
+  // --- 館內付費：ZEN SPA 療程 (與 2026 活動相容) ---
   {
     id: "p14",
     type: "paid",
@@ -2022,6 +1943,168 @@ const ACTIVITIES = [
     ],
     price: "70分鐘 NT$3,800",
     desc: "韓式深層臉部清潔，搭配超音波導入植物精華，為肌膚補充水分與彈性。(官方2025療程手冊)"
+  },
+
+  // --- 免費活動 (2026年度四月份最新官方行程) ---
+  {
+    id: "f1",
+    type: "free",
+    category: "館內免費",
+    name: "免費活動租借 (戶外球具)",
+    locationName: "豐之谷服務中心",
+    coords: RESORT_LOCATIONS["豐之谷服務中心"],
+    time: "08:30 - 17:00",
+    slots: [
+      { start: "08:30", end: "17:00" }
+    ],
+    price: "免費",
+    desc: "提供籃球、羽球、排球、足球、槌球等戶外球具租借服務。(如遇雨天或場地潮濕暫不開放)"
+  },
+  {
+    id: "f2",
+    type: "free",
+    category: "館內免費",
+    name: "免費活動租借 (室內休閒)",
+    locationName: "湖光山舍",
+    coords: RESORT_LOCATIONS["湖光山舍"],
+    time: "08:30 - 21:00",
+    slots: [
+      { start: "08:30", end: "21:00" }
+    ],
+    price: "免費",
+    desc: "提供撞球、手足球等室內休閒器材租借。(為公平使用，同組房號請勿連續租借)"
+  },
+  {
+    id: "f3",
+    type: "free",
+    category: "館內免費",
+    name: "休閒中心 (健身房)",
+    locationName: "湖光山舍",
+    coords: RESORT_LOCATIONS["休閒中心"],
+    time: "09:00 - 12:00, 14:00 - 17:00, 18:00 - 22:00",
+    slots: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "17:00" },
+      { start: "18:00", end: "22:00" }
+    ],
+    price: "免費",
+    desc: "配備跑步機、滑步機、健身車等專業健身器材，入內須穿著輕便服裝與運動鞋。"
+  },
+  {
+    id: "f4",
+    type: "free",
+    category: "館內免費",
+    name: "桌遊租借",
+    locationName: "湖光山舍",
+    coords: RESORT_LOCATIONS["湖光山舍"],
+    time: "08:30 - 21:00",
+    slots: [
+      { start: "08:30", end: "21:00" }
+    ],
+    price: "免費",
+    desc: "穿越歲月，走回童年，現場提供多款趣味桌遊供房客於休閒中心內歸還租借遊玩。"
+  },
+  {
+    id: "f5",
+    type: "free",
+    category: "館內免費",
+    name: "應許晚安遊行船",
+    locationName: "6號碼頭",
+    coords: RESORT_LOCATIONS["6號碼頭"],
+    time: "22:10 - 22:25",
+    slots: [
+      { start: "22:10", end: "22:25" }
+    ],
+    price: "免費",
+    desc: "在浪漫平靜的夜色中，理想大地的天使們獻上真摯的祝福遊行。(觀賞點為日不落橋、麥迪遜橋、8號碼頭、應許橋，非住客搭乘時間)"
+  },
+  {
+    id: "f6",
+    type: "free",
+    category: "館內免費",
+    name: "晨光瑜珈",
+    locationName: "賽維亞草原",
+    coords: RESORT_LOCATIONS["賽維亞草原"],
+    time: "08:00 - 08:30",
+    slots: [
+      { start: "08:00", end: "08:30" }
+    ],
+    price: "免費",
+    desc: "接觸大自然的律動，透過簡單舒緩的瑜珈動作放鬆身心。(每日12位，請於前一日22:00前預約)"
+  },
+  {
+    id: "f7",
+    type: "free",
+    category: "館內免費",
+    name: "兒童遊戲屋 (Niño Club)",
+    locationName: "大廳二樓",
+    coords: RESORT_LOCATIONS["大廳二樓"],
+    time: "09:00 - 12:00, 14:00 - 17:00, 18:00 - 21:00",
+    slots: [
+      { start: "09:00", end: "12:00" },
+      { start: "14:00", end: "17:00" },
+      { start: "18:00", end: "21:00" }
+    ],
+    price: "免費",
+    desc: "專屬於小朋友的室內遊玩與創作空間，入內需穿著襪子。"
+  },
+  {
+    id: "f8",
+    type: "free",
+    category: "館內免費",
+    name: "寵物樂園 (Pet Land)",
+    locationName: "大島",
+    coords: RESORT_LOCATIONS["寵物樂園"],
+    time: "09:00 - 11:00, 15:00 - 17:30",
+    slots: [
+      { start: "09:00", end: "11:00" },
+      { start: "15:00", end: "17:30" }
+    ],
+    price: "免費",
+    desc: "為毛小孩準備的寬敞草地跑跳活動空間。(專案住房預約入園，請於前1小時預約)"
+  },
+  {
+    id: "f9",
+    type: "free",
+    category: "館內免費",
+    name: "造型泳池與親水區",
+    locationName: "中島造型泳池",
+    coords: RESORT_LOCATIONS["中島"],
+    time: "08:30 - 12:00, 14:00 - 17:00",
+    slots: [
+      { start: "08:30", end: "12:00" },
+      { start: "14:00", end: "17:00" }
+    ],
+    price: "免費",
+    desc: "熱門的中島造型泳池、太魯閣岩壁風岩洞水池與兒童親水區(冬季或雷天暫停，入內須著泳衣帽)"
+  },
+  {
+    id: "f10",
+    type: "free",
+    category: "館內免費",
+    name: "歡樂 GI 互動趣",
+    locationName: "接待大廳",
+    coords: RESORT_LOCATIONS["接待大廳"],
+    time: "15:15 - 15:45",
+    slots: [
+      { start: "15:15", end: "15:45" }
+    ],
+    price: "免費",
+    desc: "【每週六日限定】GI 的幽默互動神奇表演，每場精心設計，讓您能親自參與並開懷歡笑。"
+  },
+  {
+    id: "f11",
+    type: "free",
+    category: "館內免費",
+    name: "建築藝術導覽",
+    locationName: "豐之谷服務中心",
+    coords: RESORT_LOCATIONS["豐之谷服務中心"],
+    time: "15:00 - 15:30",
+    slots: [
+      { start: "15:00", end: "15:30" }
+    ],
+    price: "免費",
+    desc: "西班牙式主題建築與花東縱谷大自然完美融合的林間小徑深度導覽。(4人成行，請提前1小時預約)"
   },
 
   // --- 館外行程 (2026年度官方行程更新) ---
