@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // 綁定按鈕點擊監聽 (阻止事件冒泡以避免 Leaflet 誤判)
         if (prevBtn) {
+            L.DomEvent.disableClickPropagation(prevBtn); // 防止 Leaflet 觸控/點擊事件攔截
             prevBtn.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 updateCarousel(currentIndex - 1);
@@ -107,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         if (nextBtn) {
+            L.DomEvent.disableClickPropagation(nextBtn); // 防止 Leaflet 觸控/點擊事件攔截
             nextBtn.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 updateCarousel(currentIndex + 1);
@@ -115,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // 綁定 Dots 點擊監聽 (阻止事件冒泡以避免 Leaflet 誤判)
         dots.forEach(dot => {
+            L.DomEvent.disableClickPropagation(dot); // 防止 Leaflet 觸控/點擊事件攔截
             dot.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 const targetIdx = parseInt(ev.target.dataset.index, 10);
